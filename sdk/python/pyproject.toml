@@ -28,7 +28,7 @@ dependencies = [
 # does. respx patches httpx's transport, so the tests exercise the real client
 # against fake responses rather than a hand-written stand-in for httpx.
 dev = [
-    "pytest>=8,<9",
+    "pytest>=8,<10",
     "respx>=0.22,<0.23",
 ]
 
