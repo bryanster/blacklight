@@ -82,6 +82,10 @@ func testConfig(t *testing.T) config.Config {
 			MaxSubscribers: 256,
 			Buffer:         16,
 			Heartbeat:      15 * time.Second,
+			// Replay must be on or Last-Event-ID tests exercise nothing: 0
+			// silently disables the catch-up path (BL-006), and production
+			// defaults it to 500 via BLACKLIGHT_EVENTS_MAX_REPLAY.
+			MaxReplayEvents: 500,
 		},
 	}
 }

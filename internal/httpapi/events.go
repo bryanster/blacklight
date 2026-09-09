@@ -237,11 +237,16 @@ func (h *handlers) streamWithReplay(
 			scope := blindScopes[topic]
 
 			for _, ev := range result.Events {
-				// Apply blind visibility filter during replay.
-				if !events.VisibleActivity(scope, ev) {
+				// Re-derive blind visibility at delivery time (BL-006):
+				// replayed payloads carry no revealed field, so
+				// VisibleActivity would fail open for step-scoped objects.
+				// VisibleReplay resolves the step behind each event and
+				// stamps reveal state into the events it keeps.
+				kept, visible := events.VisibleReplay(ctx, scope, ev, h.resolveActivityStepID, h)
+				if !visible {
 					continue
 				}
-				if err := writeSSE(w, ev); err != nil {
+				if err := writeSSE(w, kept); err != nil {
 					if log != nil {
 						log.DebugContext(ctx, "events: replay write ended", "error", err)
 					}

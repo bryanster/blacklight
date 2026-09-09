@@ -44,7 +44,8 @@ func ParseEventData(raw json.RawMessage) *EventData {
 // a subscriber under blind.Scope. It is the one shared helper used by:
 //
 //  1. [Subscription.Allow] on live engagement streams,
-//  2. catch-up replay,
+//  2. catch-up replay — through [VisibleReplay], which re-derives the
+//     reveal state stored activity rows do not carry (BL-006),
 //  3. the activity list API (converted to SSE), and
 //  4. presence focus stripping (M4-006).
 //

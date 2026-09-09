@@ -290,3 +290,14 @@ immediately.** **M7-009** is the exit gate. **M7-010…M7-012** are High finding
 | [M7-012](done/M7-012-cross-engagement-idor.md) ✅ | Bind nested IDs to the authorized engagement (BL-002, High) | L |
 | [M7-013](done/M7-013-share-token-logging.md) ✅ | Share tokens in logs; unthrottled claim/password (BL-005, Medium) | M |
 | [M7-014](done/M7-014-content-sync-ssrf.md) ✅ | Content sync SSRF allowlist (BL-004, Medium) | M |
+
+## Security findings (BL)
+
+Findings from security passes over the shipped tree. BL-001…BL-005 came out of the M7 review and
+are closed by the `M7-010…M7-014` tickets above. Later findings are filed here directly, each
+with its proof.
+
+| ID | Title | Severity | State |
+|---|---|---|---|
+| [BL-006](done/BL-006-sse-replay-blind-leak.md) | SSE catch-up replay delivers unrevealed-step events to blue | Medium | ✅ closed 2026-09-09 |
+| [BL-007](BL-007-finding-read-blind-step-leak.md) | Findings list exposes unrevealed step ids to blue | Medium | open |

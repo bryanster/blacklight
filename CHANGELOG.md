@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **The SSE catch-up replay path now honours blind mode (BL-006, Medium).**
+  Reconnecting with `Last-Event-ID` replays catch-up events rebuilt from the
+  activity log, and those rebuilt payloads carried no `revealed` field — so
+  the blind-mode filter that protects the live stream failed open on the
+  replay path, and a blue member reconnecting with a stale
+  `Last-Event-ID` received `step.*`, `execution.*`, `comment.*` and
+  `evidence.*` frames about **unrevealed steps** while the live stream would
+  have dropped the identical events. Replay now re-derives reveal state from
+  the engagement store at delivery time: rows for unrevealed steps are
+  dropped, events for revealed steps still arrive (including a step revealed
+  between event write and replay), red/lead/admin replay is unchanged, and
+  `MaxReplayEvents = 0` still disables replay with `stream.gap` on
+  truncation.
+
 ## [1.0.3] — 2026-09-05
 
 ### Added
