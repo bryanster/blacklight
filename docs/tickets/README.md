@@ -300,4 +300,4 @@ with its proof.
 | ID | Title | Severity | State |
 |---|---|---|---|
 | [BL-006](done/BL-006-sse-replay-blind-leak.md) | SSE catch-up replay delivers unrevealed-step events to blue | Medium | ✅ closed 2026-09-09 |
-| [BL-007](BL-007-finding-read-blind-step-leak.md) | Findings list exposes unrevealed step ids to blue | Medium | open |
+| [BL-007](done/BL-007-finding-read-blind-step-leak.md) | Findings list exposes unrevealed step ids to blue | Medium | ✅ closed 2026-09-11 |

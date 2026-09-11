@@ -190,13 +190,50 @@ func findingToWire(ctx context.Context, h *handlers, f storengagement.Finding) (
 	if err != nil {
 		return gen.Finding{}, err
 	}
-	stepIDs := make([]openapi_types.UUID, len(steps))
-	for i, s := range steps {
-		stepIDs[i] = mustParseUUID(s.ID)
+	stepIDs, err := h.visibleFindingStepIDs(ctx, f.EngagementID, steps)
+	if err != nil {
+		return gen.Finding{}, err
 	}
 	w.StepIds = stepIDs
 
 	return w, nil
+}
+
+// visibleFindingStepIDs returns the linked step ids a finding carries on the
+// wire for the calling seat. In a blind engagement the blue seat must not
+// learn that an unrevealed step exists (docs/authz.md), so each link is
+// resolved live — a step revealed after the finding was linked is returned,
+// an unrevealed one is dropped. This is the same filter the archive export
+// applies to finding→step links (archivehandler.go); the findings themselves
+// stay visible to blue, so a finding whose links are all hidden arrives with
+// an empty stepIds. A lookup failure fails the request rather than leaking
+// the id, matching the handler-side blind checks (evidenceConcealed).
+func (h *handlers) visibleFindingStepIDs(ctx context.Context,
+	engagementID string, steps []storengagement.Step,
+) ([]openapi_types.UUID, error) {
+	scope, err := h.stepBlindScope(ctx, engagementID)
+	if err != nil {
+		return nil, err
+	}
+	if !scope.Withholds() {
+		stepIDs := make([]openapi_types.UUID, len(steps))
+		for i, s := range steps {
+			stepIDs[i] = mustParseUUID(s.ID)
+		}
+		return stepIDs, nil
+	}
+
+	stepIDs := make([]openapi_types.UUID, 0, len(steps))
+	for _, s := range steps {
+		revealed, err := h.IsStepRevealed(ctx, s.ID)
+		if err != nil {
+			return nil, fmt.Errorf("step visibility: %w", err)
+		}
+		if revealed {
+			stepIDs = append(stepIDs, mustParseUUID(s.ID))
+		}
+	}
+	return stepIDs, nil
 }
 
 // stringFromPtr returns the string value from a pointer, or "" if nil.

@@ -90,6 +90,7 @@ resource "azurerm_container_app_environment" "main" {
   location                   = azurerm_resource_group.main.location
   resource_group_name        = azurerm_resource_group.main.name
   log_analytics_workspace_id = azurerm_log_analytics_workspace.main.id
+  logs_destination           = "log-analytics"
 }
 
 # ─── storage: the database + evidence live on an Azure Files share ───────────
@@ -104,7 +105,7 @@ resource "azurerm_storage_account" "main" {
 
 resource "azurerm_storage_share" "data" {
   name                 = local.file_share_name
-  storage_account_name = azurerm_storage_account.main.name
+  storage_account_id   = azurerm_storage_account.main.id
   quota                = var.storage_share_quota_gb
 }
 
@@ -132,6 +133,7 @@ resource "azurerm_key_vault" "main" {
   resource_group_name = azurerm_resource_group.main.name
   tenant_id           = data.azurerm_client_config.current.tenant_id
   sku_name            = "standard"
+  rbac_authorization_enabled = false
 }
 
 # Two independent values, so the encryption key can never equal the session
