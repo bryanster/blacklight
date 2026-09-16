@@ -73,9 +73,14 @@ type Entries struct {
 // New returns a repository over db.
 func New(db DB) *Entries { return &Entries{db: db} }
 
-const entryColumns = `id, engagement_id, actor_id, verb, object_type, object_id, delta, "at"`
+// selectEntryColumns casts the JSON delta to VARCHAR: DuckDB scans a JSON
+// column as a parsed value (map/slice), which database/sql cannot store in
+// json.RawMessage and which deltaBytes would then re-marshal — losing object
+// key order and integers above 2^53. CAST returns the raw stored JSON text.
+const selectEntryColumns = `id, engagement_id, actor_id, verb, object_type, object_id,
+	CAST(delta AS VARCHAR), "at"`
 
-const selectEntry = `SELECT ` + entryColumns + ` FROM app.activity `
+const selectEntry = `SELECT ` + selectEntryColumns + ` FROM app.activity `
 
 const insertEntry = `INSERT INTO app.activity
 	(id, engagement_id, actor_id, verb, object_type, object_id, delta, "at")
