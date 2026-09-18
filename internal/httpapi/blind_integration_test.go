@@ -411,6 +411,24 @@ func seedUnrevealedStep(t *testing.T, server *authServer, stepID, scenarioID str
 	}
 }
 
+func seedRevealedStep(t *testing.T, server *authServer, stepID, scenarioID string) {
+	t.Helper()
+	if err := server.db.Write(t.Context(), func(tx *sql.Tx) error {
+		_, err := tx.ExecContext(t.Context(),
+			`INSERT INTO app.step (id, scenario_id, ordinal, name, objective, technique_id,
+			 subtechnique_id, tactic_id, "procedure", template_id, target_asset,
+			 tools, controls_in_scope, attack_version, revealed_at, created_at, updated_at)
+			VALUES (?, ?, 1, 'revealed-step', '', 'T1003', '', '',
+			 '{}', '', '', '[]', '[]', '15.1',
+			 '2026-01-02 00:00:00', '2026-01-01 00:00:00', '2026-01-01 00:00:00')`,
+			stepID, scenarioID,
+		)
+		return err
+	}); err != nil {
+		t.Fatalf("seeding revealed step: %v", err)
+	}
+}
+
 func seedStandardEngagement(t *testing.T, server *authServer,
 	engID, scenarioID, stepID string, red, blue identity.User,
 ) {

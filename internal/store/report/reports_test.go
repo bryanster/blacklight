@@ -4,6 +4,8 @@ import (
 	"context"
 	"database/sql"
 	"encoding/json"
+	"errors"
+	"reflect"
 	"testing"
 
 	"github.com/bryanster/blacklight/internal/store"
@@ -307,5 +309,221 @@ func TestBlockCountsByEngagement(t *testing.T) {
 	}
 	if len(other) != 0 {
 		t.Errorf("counts for an unrelated engagement = %v, want empty", other)
+	}
+}
+
+func TestReportUpdatePreservesAndClearsBranding(t *testing.T) {
+	db := storetest.Migrated(t)
+	reports := NewReports(db)
+	ctx := t.Context()
+	rep, err := reports.Create(ctx, NewReport{
+		EngagementID: insertEngagement(t, db), Title: "Original", CreatedBy: "admin",
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	client, logo := "Client override", "logo-digest"
+	clientPtr, logoPtr := &client, &logo
+	if _, err := reports.Update(ctx, rep.ID, ReportUpdate{
+		ClientName: &clientPtr, LogoBlobRef: &logoPtr, UpdatedBy: "editor",
+	}); err != nil {
+		t.Fatal(err)
+	}
+	title := "Renamed"
+	if _, err := reports.Update(ctx, rep.ID, ReportUpdate{Title: &title, UpdatedBy: "editor"}); err != nil {
+		t.Fatal(err)
+	}
+	got, err := reports.ByID(ctx, rep.ID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got.Title != title || got.ClientName == nil || *got.ClientName != client || got.LogoBlobRef == nil || *got.LogoBlobRef != logo {
+		t.Fatalf("omitted branding did not preserve overrides: %+v", got)
+	}
+	// An explicit empty string is a value, not SQL NULL.
+	empty := ""
+	emptyPtr := &empty
+	if _, err := reports.Update(ctx, rep.ID, ReportUpdate{
+		ClientName: &emptyPtr, LogoBlobRef: &emptyPtr, UpdatedBy: "editor",
+	}); err != nil {
+		t.Fatal(err)
+	}
+	got, err = reports.ByID(ctx, rep.ID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got.ClientName == nil || *got.ClientName != "" || got.LogoBlobRef == nil || *got.LogoBlobRef != "" {
+		t.Fatalf("empty overrides became NULL: %+v", got)
+	}
+	var clear *string
+	var clearColours json.RawMessage
+	if _, err := reports.Update(ctx, rep.ID, ReportUpdate{
+		ClientName: &clear, LogoBlobRef: &clear, Colours: &clearColours, UpdatedBy: "editor",
+	}); err != nil {
+		t.Fatal(err)
+	}
+	got, err = reports.ByID(ctx, rep.ID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got.ClientName != nil || got.LogoBlobRef != nil || len(got.Colours) != 0 || got.Title != title {
+		t.Fatalf("explicit clear did not restore nullable branding: %+v", got)
+	}
+	if got.CreatedBy != rep.CreatedBy || got.UpdatedBy == nil || *got.UpdatedBy != "editor" {
+		t.Fatalf("update lost authorship: %+v", got)
+	}
+}
+
+func TestReportVersionsListIsolationAndSnapshot(t *testing.T) {
+	db := storetest.Migrated(t)
+	reports, versions := NewReports(db), NewVersions(db)
+	ctx := t.Context()
+	// Each engagement and report has a distinct ID; no shared fixture rows.
+	var reportIDs []string
+	for _, title := range []string{"Baseline", "Retest"} {
+		engID := newID()
+		if err := db.Write(ctx, func(tx *sql.Tx) error {
+			_, err := tx.ExecContext(ctx, `INSERT INTO app.engagement
+				(id, name, client, description, status, starts_on, ends_on,
+				 attack_version, mode, auto_reveal_on_start, created_by, created_at, updated_at)
+				VALUES (?, ?, 'Client', '', 'active', DATE '2026-01-01', DATE '2026-01-31',
+				 '15.1', 'standard', false, 'admin', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`, engID, title)
+			return err
+		}); err != nil {
+			t.Fatal(err)
+		}
+		rep, err := reports.Create(ctx, NewReport{EngagementID: engID, Title: title, CreatedBy: "admin"})
+		if err != nil {
+			t.Fatal(err)
+		}
+		reportIDs = append(reportIDs, rep.ID)
+	}
+	blocks := `[{"blockId":"rich_text","params":{"html":"<p>Snapshot</p>"}}]`
+	branding := `{"clientName":"Published client"}`
+	first, err := versions.Insert(ctx, NewVersion{
+		ReportID: reportIDs[0], Ordinal: 1, Title: "Published baseline", PublishedBy: "admin",
+		IncludeEvidence: true, BlindScope: "all", BlocksJSON: blocks, BrandingJSON: branding,
+		HTML: "<html>Snapshot</html>", ContentSHA256: "snapshot-hash",
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	second, err := versions.Insert(ctx, NewVersion{
+		ReportID: reportIDs[0], Ordinal: 2, Title: "Second publication", PublishedBy: "admin",
+		BlindScope: "all", BlocksJSON: "[]", BrandingJSON: "{}", HTML: "<html>Second</html>",
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	other, err := versions.Insert(ctx, NewVersion{
+		ReportID: reportIDs[1], Ordinal: 1, Title: "Retest publication", PublishedBy: "admin",
+		BlindScope: "all", HTML: "<html>Retest</html>",
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	listed, err := versions.ListByReport(ctx, reportIDs[0])
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(listed) != 2 || listed[0].ID != second.ID || listed[1].ID != first.ID {
+		t.Fatalf("versions not isolated/newest first: %+v", listed)
+	}
+	got, err := versions.ByID(ctx, first.ID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got.ReportID != reportIDs[0] || got.BlocksJSON != blocks || got.BrandingJSON != branding || got.HTML != first.HTML || !got.IncludeEvidence || got.ContentSHA256 == nil || *got.ContentSHA256 != "snapshot-hash" {
+		t.Fatalf("published snapshot did not round-trip: %+v", got)
+	}
+	listed, err = versions.ListByReport(ctx, reportIDs[1])
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(listed) != 1 || listed[0].ID != other.ID || listed[0].BlocksJSON != "[]" || listed[0].BrandingJSON != "{}" {
+		t.Fatalf("unrelated/empty snapshot: %+v", listed)
+	}
+}
+
+func TestReportUpdateCallbackFailureRollsBack(t *testing.T) {
+	db := storetest.Migrated(t)
+	reports := NewReports(db)
+	ctx := t.Context()
+	rep, err := reports.Create(ctx, NewReport{EngagementID: insertEngagement(t, db), Title: "Original", CreatedBy: "admin"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	before, err := reports.ByID(ctx, rep.ID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	failure := errors.New("audit persistence failed")
+	title := "Must not persist"
+	_, err = reports.Update(ctx, rep.ID, ReportUpdate{Title: &title, UpdatedBy: "editor"},
+		func(context.Context, *sql.Tx) error { return failure })
+	if !errors.Is(err, failure) {
+		t.Fatalf("update error = %v, want callback failure", err)
+	}
+	after, err := reports.ByID(ctx, rep.ID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !reflect.DeepEqual(after, before) {
+		t.Fatalf("failed update changed persisted report: %+v, want %+v", after, before)
+	}
+}
+
+func TestVersionPublicationRollbackAndPDFHashPreserveSnapshot(t *testing.T) {
+	db := storetest.Migrated(t)
+	reports, versions := NewReports(db), NewVersions(db)
+	ctx := t.Context()
+	rep, err := reports.Create(ctx, NewReport{EngagementID: insertEngagement(t, db), Title: "Draft", CreatedBy: "admin"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	in := NewVersion{ReportID: rep.ID, Ordinal: 1, Title: "Published", PublishedBy: "admin",
+		BlindScope: "all", BlocksJSON: "[]", BrandingJSON: "{}", HTML: "<html>Original</html>"}
+	failure := errors.New("publication audit failed")
+	_, err = versions.Insert(ctx, in, func(context.Context, *sql.Tx) error { return failure })
+	if !errors.Is(err, failure) {
+		t.Fatalf("insert error = %v, want callback failure", err)
+	}
+	count, err := versions.CountByReport(ctx, rep.ID)
+	if err != nil || count != 0 {
+		t.Fatalf("failed publication persisted: count=%d, err=%v", count, err)
+	}
+	next, err := versions.NextOrdinal(ctx, rep.ID)
+	if err != nil || next != 1 {
+		t.Fatalf("failed publication consumed ordinal: next=%d, err=%v", next, err)
+	}
+	ver, err := versions.Insert(ctx, in)
+	if err != nil {
+		t.Fatal(err)
+	}
+	before, err := versions.ByID(ctx, ver.ID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := versions.SetPDFSHA256(ctx, ver.ID, "generated-pdf-hash"); err != nil {
+		t.Fatal(err)
+	}
+	newTitle := "Edited draft"
+	if _, err := reports.Update(ctx, rep.ID, ReportUpdate{Title: &newTitle, UpdatedBy: "editor"}); err != nil {
+		t.Fatal(err)
+	}
+	after, err := versions.ByID(ctx, ver.ID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if before.PDFSHA256 != nil || after.PDFSHA256 == nil || *after.PDFSHA256 != "generated-pdf-hash" {
+		t.Fatalf("PDF hash not persisted: before=%+v, after=%+v", before.PDFSHA256, after.PDFSHA256)
+	}
+	after.PDFSHA256 = nil
+	if !reflect.DeepEqual(after, before) {
+		t.Fatalf("PDF generation or draft edit changed snapshot: %+v, want %+v", after, before)
+	}
+	next, err = versions.NextOrdinal(ctx, rep.ID)
+	if err != nil || next != 2 {
+		t.Fatalf("published version did not advance ordinal: next=%d, err=%v", next, err)
 	}
 }

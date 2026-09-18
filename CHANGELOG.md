@@ -7,6 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **The SSE catch-up replay path now honours blind mode (BL-006, Medium).**
+  Reconnecting with `Last-Event-ID` replays catch-up events rebuilt from the
+  activity log, and those rebuilt payloads carried no `revealed` field — so
+  the blind-mode filter that protects the live stream failed open on the
+  replay path, and a blue member reconnecting with a stale
+  `Last-Event-ID` received `step.*`, `execution.*`, `comment.*` and
+  `evidence.*` frames about **unrevealed steps** while the live stream would
+  have dropped the identical events. Replay now re-derives reveal state from
+  the engagement store at delivery time: rows for unrevealed steps are
+  dropped, events for revealed steps still arrive (including a step revealed
+  between event write and replay), red/lead/admin replay is unchanged, and
+  `MaxReplayEvents = 0` still disables replay with `stream.gap` on
+  truncation.
+- **The findings endpoints now honour blind mode on linked steps (BL-007,
+  Medium).** `finding.read` is membership-gated on purpose — blue may read
+  findings — but the wire representation embedded every linked step id, so a
+  blue member of a blind engagement received the **ids of unrevealed steps**
+  from `GET /engagements/{id}/findings` and `GET /findings/{id}` (and from
+  the create and patch responses): the existence fact blind mode exists to
+  withhold. Findings themselves stay visible to blue; the linked `stepIds`
+  are now resolved live at read time, the way the archive export already
+  filtered the same links — unrevealed links are withheld, revealed ones
+  still arrive (including a step revealed after the finding was linked), a
+  finding whose links are all hidden arrives with an empty `stepIds`, and
+  red/lead/admin output is unchanged.
+
 ## [1.0.3] — 2026-09-05
 
 ### Added
