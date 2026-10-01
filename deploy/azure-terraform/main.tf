@@ -22,7 +22,7 @@ terraform {
     azurerm = {
       # 4.23.0 is the first release with `azurerm_key_vault_secret.value_wo`.
       source  = "hashicorp/azurerm"
-      version = ">= 4.23.0, < 5.2.1"
+      version = ">= 4.23.0, < 5.7.1"
     }
     random = {
       # 3.7.0 is the first release with the `random_password` ephemeral resource.
