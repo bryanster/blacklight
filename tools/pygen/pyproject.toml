@@ -23,7 +23,7 @@ description = "Pinned toolchain for generating sdk/python. Not published, not im
 # this generator emits uses `X | None` unions.
 requires-python = ">=3.11,<4.0"
 dependencies = [
-    "openapi-python-client==0.29.0",
+    "openapi-python-client==0.29.1",
     # Pinned explicitly even though the generator depends on it: `ruff format`
     # runs as a post-hook over the generated code, so a ruff release that
     # changed one line of formatting would show up as codegen drift in a pull
