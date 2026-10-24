@@ -104,14 +104,14 @@ def sync_detailed(
     body: StartContentSyncRequest | Unset = UNSET,
     x_csrf_token: str | Unset = UNSET,
 ) -> Response[ContentSyncJob | Problem]:
-    r"""Enqueue a content sync job for a source.
+    """Enqueue a content sync job for a source.
 
      Administrators only (`content.sync`). Enqueues one installation-wide
     content job. A second start while any job is `queued`, `running`, or
     `cancelling` answers `409` and names the active `jobId` in `detail`.
 
-    The optional body pin `{ \"version\": \"15.1\" }` selects a known ATT&CK
-    release. Omit it to mean \"latest discoverable\" per the adapter. Rolling
+    The optional body pin `{ "version": "15.1" }` selects a known ATT&CK
+    release. Omit it to mean "latest discoverable" per the adapter. Rolling
     sources (Atomic, Sigma, CTID) always write the `current` version token
     and ignore a pin.
 
@@ -152,14 +152,14 @@ def sync(
     body: StartContentSyncRequest | Unset = UNSET,
     x_csrf_token: str | Unset = UNSET,
 ) -> ContentSyncJob | Problem | None:
-    r"""Enqueue a content sync job for a source.
+    """Enqueue a content sync job for a source.
 
      Administrators only (`content.sync`). Enqueues one installation-wide
     content job. A second start while any job is `queued`, `running`, or
     `cancelling` answers `409` and names the active `jobId` in `detail`.
 
-    The optional body pin `{ \"version\": \"15.1\" }` selects a known ATT&CK
-    release. Omit it to mean \"latest discoverable\" per the adapter. Rolling
+    The optional body pin `{ "version": "15.1" }` selects a known ATT&CK
+    release. Omit it to mean "latest discoverable" per the adapter. Rolling
     sources (Atomic, Sigma, CTID) always write the `current` version token
     and ignore a pin.
 
@@ -195,14 +195,14 @@ async def asyncio_detailed(
     body: StartContentSyncRequest | Unset = UNSET,
     x_csrf_token: str | Unset = UNSET,
 ) -> Response[ContentSyncJob | Problem]:
-    r"""Enqueue a content sync job for a source.
+    """Enqueue a content sync job for a source.
 
      Administrators only (`content.sync`). Enqueues one installation-wide
     content job. A second start while any job is `queued`, `running`, or
     `cancelling` answers `409` and names the active `jobId` in `detail`.
 
-    The optional body pin `{ \"version\": \"15.1\" }` selects a known ATT&CK
-    release. Omit it to mean \"latest discoverable\" per the adapter. Rolling
+    The optional body pin `{ "version": "15.1" }` selects a known ATT&CK
+    release. Omit it to mean "latest discoverable" per the adapter. Rolling
     sources (Atomic, Sigma, CTID) always write the `current` version token
     and ignore a pin.
 
@@ -241,14 +241,14 @@ async def asyncio(
     body: StartContentSyncRequest | Unset = UNSET,
     x_csrf_token: str | Unset = UNSET,
 ) -> ContentSyncJob | Problem | None:
-    r"""Enqueue a content sync job for a source.
+    """Enqueue a content sync job for a source.
 
      Administrators only (`content.sync`). Enqueues one installation-wide
     content job. A second start while any job is `queued`, `running`, or
     `cancelling` answers `409` and names the active `jobId` in `detail`.
 
-    The optional body pin `{ \"version\": \"15.1\" }` selects a known ATT&CK
-    release. Omit it to mean \"latest discoverable\" per the adapter. Rolling
+    The optional body pin `{ "version": "15.1" }` selects a known ATT&CK
+    release. Omit it to mean "latest discoverable" per the adapter. Rolling
     sources (Atomic, Sigma, CTID) always write the `current` version token
     and ignore a pin.
 

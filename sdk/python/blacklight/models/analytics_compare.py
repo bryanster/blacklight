@@ -33,8 +33,8 @@ class AnalyticsCompare:
     pin_mismatch: PinMismatch | Unset = UNSET
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.compare_row import CompareRow
-        from ..models.pin_mismatch import PinMismatch
+        from ..models.compare_row import CompareRow  # noqa: PLC0415
+        from ..models.pin_mismatch import PinMismatch  # noqa: PLC0415
 
         rows = []
         for rows_item_data in self.rows:
@@ -83,8 +83,8 @@ class AnalyticsCompare:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.compare_row import CompareRow
-        from ..models.pin_mismatch import PinMismatch
+        from ..models.compare_row import CompareRow  # noqa: PLC0415
+        from ..models.pin_mismatch import PinMismatch  # noqa: PLC0415
 
         d = dict(src_dict)
         rows = []

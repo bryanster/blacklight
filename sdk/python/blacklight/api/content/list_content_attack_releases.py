@@ -71,11 +71,11 @@ def sync_detailed(
     *,
     client: AuthenticatedClient | Client,
 ) -> Response[ContentAttackReleaseList | Problem]:
-    r"""List the ATT&CK releases upstream offers, and which are installed.
+    """List the ATT&CK releases upstream offers, and which are installed.
 
      Any authenticated subject (`content.read`). Reads the ATT&CK source's
     published release index — the same index a sync with no pin uses to
-    resolve \"latest\" — and merges it with the versions this installation
+    resolve "latest" — and merges it with the versions this installation
     already holds. It is what the first-run version picker is built on.
 
     This reaches upstream while the request is open. It takes no job slot
@@ -112,11 +112,11 @@ def sync(
     *,
     client: AuthenticatedClient | Client,
 ) -> ContentAttackReleaseList | Problem | None:
-    r"""List the ATT&CK releases upstream offers, and which are installed.
+    """List the ATT&CK releases upstream offers, and which are installed.
 
      Any authenticated subject (`content.read`). Reads the ATT&CK source's
     published release index — the same index a sync with no pin uses to
-    resolve \"latest\" — and merges it with the versions this installation
+    resolve "latest" — and merges it with the versions this installation
     already holds. It is what the first-run version picker is built on.
 
     This reaches upstream while the request is open. It takes no job slot
@@ -149,11 +149,11 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient | Client,
 ) -> Response[ContentAttackReleaseList | Problem]:
-    r"""List the ATT&CK releases upstream offers, and which are installed.
+    """List the ATT&CK releases upstream offers, and which are installed.
 
      Any authenticated subject (`content.read`). Reads the ATT&CK source's
     published release index — the same index a sync with no pin uses to
-    resolve \"latest\" — and merges it with the versions this installation
+    resolve "latest" — and merges it with the versions this installation
     already holds. It is what the first-run version picker is built on.
 
     This reaches upstream while the request is open. It takes no job slot
@@ -188,11 +188,11 @@ async def asyncio(
     *,
     client: AuthenticatedClient | Client,
 ) -> ContentAttackReleaseList | Problem | None:
-    r"""List the ATT&CK releases upstream offers, and which are installed.
+    """List the ATT&CK releases upstream offers, and which are installed.
 
      Any authenticated subject (`content.read`). Reads the ATT&CK source's
     published release index — the same index a sync with no pin uses to
-    resolve \"latest\" — and merges it with the versions this installation
+    resolve "latest" — and merges it with the versions this installation
     already holds. It is what the first-run version picker is built on.
 
     This reaches upstream while the request is open. It takes no job slot

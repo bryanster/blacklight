@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class TokenScope(str, Enum):
+class TokenScope(StrEnum):
     ADMINREAD = "admin:read"
     ADMINWRITE = "admin:write"
     CONTENTREAD = "content:read"

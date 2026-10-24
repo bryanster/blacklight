@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class ContentSourceVersionStatus(str, Enum):
+class ContentSourceVersionStatus(StrEnum):
     ERROR = "error"
     PENDING = "pending"
     READY = "ready"

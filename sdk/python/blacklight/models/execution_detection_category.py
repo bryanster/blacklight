@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class ExecutionDetectionCategory(str, Enum):
+class ExecutionDetectionCategory(StrEnum):
     GENERAL = "general"
     NONE = "none"
     TACTIC = "tactic"

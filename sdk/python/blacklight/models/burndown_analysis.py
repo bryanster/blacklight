@@ -29,8 +29,8 @@ class BurndownAnalysis:
     points: list[BurndownPoint] | Unset = UNSET
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.burndown_point import BurndownPoint
-        from ..models.severity_snapshot import SeveritySnapshot
+        from ..models.burndown_point import BurndownPoint  # noqa: PLC0415
+        from ..models.severity_snapshot import SeveritySnapshot  # noqa: PLC0415
 
         severity = self.severity.to_dict()
 
@@ -64,8 +64,8 @@ class BurndownAnalysis:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.burndown_point import BurndownPoint
-        from ..models.severity_snapshot import SeveritySnapshot
+        from ..models.burndown_point import BurndownPoint  # noqa: PLC0415
+        from ..models.severity_snapshot import SeveritySnapshot  # noqa: PLC0415
 
         d = dict(src_dict)
         severity = SeveritySnapshot.from_dict(d.pop("severity"))

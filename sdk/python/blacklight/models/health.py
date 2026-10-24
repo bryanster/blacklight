@@ -36,7 +36,7 @@ class Health:
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.health_checks import HealthChecks
+        from ..models.health_checks import HealthChecks  # noqa: PLC0415
 
         status = self.status.value
 
@@ -55,7 +55,7 @@ class Health:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.health_checks import HealthChecks
+        from ..models.health_checks import HealthChecks  # noqa: PLC0415
 
         d = dict(src_dict)
         status = HealthState(d.pop("status"))

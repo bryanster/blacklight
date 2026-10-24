@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class EngagementRole(str, Enum):
+class EngagementRole(StrEnum):
     BLUE = "blue"
     LEAD = "lead"
     OBSERVER = "observer"

@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class PlatformRole(str, Enum):
+class PlatformRole(StrEnum):
     ADMIN = "admin"
     MEMBER = "member"
 

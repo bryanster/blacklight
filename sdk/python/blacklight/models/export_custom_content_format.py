@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class ExportCustomContentFormat(str, Enum):
+class ExportCustomContentFormat(StrEnum):
     JSON = "json"
     YAML = "yaml"
 

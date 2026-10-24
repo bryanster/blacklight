@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class GuestRegisterResultPlatformRole(str, Enum):
+class GuestRegisterResultPlatformRole(StrEnum):
     MEMBER = "member"
 
     def __str__(self) -> str:

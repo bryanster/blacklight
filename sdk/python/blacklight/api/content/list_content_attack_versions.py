@@ -66,14 +66,14 @@ def sync_detailed(
     *,
     client: AuthenticatedClient | Client,
 ) -> Response[ContentAttackVersionList | Problem]:
-    r"""List installed ATT&CK versions.
+    """List installed ATT&CK versions.
 
      Any authenticated subject (`content.read`). Returns every version
     snapshot under the ATT&CK source with item counts and `syncedAt`.
 
     The version string is an opaque release label equal to
     `content_source_version.version` (for example `15.1`). There is no
-    semver rewriting and no implicit \"latest\" — pin-sensitive callers must
+    semver rewriting and no implicit "latest" — pin-sensitive callers must
     name the version they mean. See `docs/content-attack.md` and
     `docs/content-copy-on-use.md`.
 
@@ -98,14 +98,14 @@ def sync(
     *,
     client: AuthenticatedClient | Client,
 ) -> ContentAttackVersionList | Problem | None:
-    r"""List installed ATT&CK versions.
+    """List installed ATT&CK versions.
 
      Any authenticated subject (`content.read`). Returns every version
     snapshot under the ATT&CK source with item counts and `syncedAt`.
 
     The version string is an opaque release label equal to
     `content_source_version.version` (for example `15.1`). There is no
-    semver rewriting and no implicit \"latest\" — pin-sensitive callers must
+    semver rewriting and no implicit "latest" — pin-sensitive callers must
     name the version they mean. See `docs/content-attack.md` and
     `docs/content-copy-on-use.md`.
 
@@ -126,14 +126,14 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient | Client,
 ) -> Response[ContentAttackVersionList | Problem]:
-    r"""List installed ATT&CK versions.
+    """List installed ATT&CK versions.
 
      Any authenticated subject (`content.read`). Returns every version
     snapshot under the ATT&CK source with item counts and `syncedAt`.
 
     The version string is an opaque release label equal to
     `content_source_version.version` (for example `15.1`). There is no
-    semver rewriting and no implicit \"latest\" — pin-sensitive callers must
+    semver rewriting and no implicit "latest" — pin-sensitive callers must
     name the version they mean. See `docs/content-attack.md` and
     `docs/content-copy-on-use.md`.
 
@@ -156,14 +156,14 @@ async def asyncio(
     *,
     client: AuthenticatedClient | Client,
 ) -> ContentAttackVersionList | Problem | None:
-    r"""List installed ATT&CK versions.
+    """List installed ATT&CK versions.
 
      Any authenticated subject (`content.read`). Returns every version
     snapshot under the ATT&CK source with item counts and `syncedAt`.
 
     The version string is an opaque release label equal to
     `content_source_version.version` (for example `15.1`). There is no
-    semver rewriting and no implicit \"latest\" — pin-sensitive callers must
+    semver rewriting and no implicit "latest" — pin-sensitive callers must
     name the version they mean. See `docs/content-attack.md` and
     `docs/content-copy-on-use.md`.
 

@@ -27,7 +27,7 @@ class CreateReportShareResult:
     """ The share token. Shown once; never stored plaintext. """
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.report_share import ReportShare
+        from ..models.report_share import ReportShare  # noqa: PLC0415
 
         share = self.share.to_dict()
 
@@ -50,7 +50,7 @@ class CreateReportShareResult:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.report_share import ReportShare
+        from ..models.report_share import ReportShare  # noqa: PLC0415
 
         d = dict(src_dict)
         share = ReportShare.from_dict(d.pop("share"))

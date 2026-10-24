@@ -17,9 +17,9 @@ module github.com/bryanster/blacklight/sdk/go
 go 1.24.0
 
 require (
-	github.com/oapi-codegen/nullable v1.1.0
-	github.com/oapi-codegen/runtime v1.6.0
-	go.yaml.in/yaml/v3 v3.0.4
+	github.com/oapi-codegen/nullable v1.2.0
+	github.com/oapi-codegen/runtime v1.7.0
+	go.yaml.in/yaml/v3 v3.0.5
 )
 
 require (

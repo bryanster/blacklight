@@ -22,7 +22,7 @@ class TacticCoverage:
     rows: list[TacticCoverageRow]
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.tactic_coverage_row import TacticCoverageRow
+        from ..models.tactic_coverage_row import TacticCoverageRow  # noqa: PLC0415
 
         rows = []
         for rows_item_data in self.rows:
@@ -41,7 +41,7 @@ class TacticCoverage:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.tactic_coverage_row import TacticCoverageRow
+        from ..models.tactic_coverage_row import TacticCoverageRow  # noqa: PLC0415
 
         d = dict(src_dict)
         rows = []

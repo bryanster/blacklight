@@ -26,7 +26,7 @@ class PatchReport:
     colours: None | PatchReportColoursType0 | Unset = UNSET
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.patch_report_colours_type_0 import PatchReportColoursType0
+        from ..models.patch_report_colours_type_0 import PatchReportColoursType0  # noqa: PLC0415
 
         title = self.title
 
@@ -66,7 +66,7 @@ class PatchReport:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.patch_report_colours_type_0 import PatchReportColoursType0
+        from ..models.patch_report_colours_type_0 import PatchReportColoursType0  # noqa: PLC0415
 
         d = dict(src_dict)
         title = d.pop("title", UNSET)

@@ -33,7 +33,7 @@ class ReportBlockInput:
      """
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.report_block_input_params import ReportBlockInputParams
+        from ..models.report_block_input_params import ReportBlockInputParams  # noqa: PLC0415
 
         block_id = self.block_id
 
@@ -55,7 +55,7 @@ class ReportBlockInput:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.report_block_input_params import ReportBlockInputParams
+        from ..models.report_block_input_params import ReportBlockInputParams  # noqa: PLC0415
 
         d = dict(src_dict)
         block_id = d.pop("blockId")

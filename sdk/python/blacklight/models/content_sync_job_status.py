@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class ContentSyncJobStatus(str, Enum):
+class ContentSyncJobStatus(StrEnum):
     CANCELLED = "cancelled"
     CANCELLING = "cancelling"
     FAILED = "failed"

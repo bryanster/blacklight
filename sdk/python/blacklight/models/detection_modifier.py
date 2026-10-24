@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class DetectionModifier(str, Enum):
+class DetectionModifier(StrEnum):
     ALERT = "alert"
     CONFIG_CHANGE = "config_change"
     CORRELATED = "correlated"

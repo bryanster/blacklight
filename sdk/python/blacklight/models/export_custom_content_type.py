@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class ExportCustomContentType(str, Enum):
+class ExportCustomContentType(StrEnum):
     DETECTION_RULES = "detection_rules"
     NOTES = "notes"
     PROCEDURE_TEMPLATES = "procedure_templates"

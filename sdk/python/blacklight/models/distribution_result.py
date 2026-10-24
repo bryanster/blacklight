@@ -23,7 +23,7 @@ class DistributionResult:
     buckets: list[DistributionBucket]
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.distribution_bucket import DistributionBucket
+        from ..models.distribution_bucket import DistributionBucket  # noqa: PLC0415
 
         attempted = self.attempted
 
@@ -45,7 +45,7 @@ class DistributionResult:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.distribution_bucket import DistributionBucket
+        from ..models.distribution_bucket import DistributionBucket  # noqa: PLC0415
 
         d = dict(src_dict)
         attempted = d.pop("attempted")

@@ -33,13 +33,13 @@ RUN apt-get update \
 
 # Node, taken from the official image rather than installed from a distribution
 # repository, because the version has to be *exact*: .prototools, web/.nvmrc and
-# web/package.json's `engines` all name 24.18.1, and so does the node stage in
+# web/package.json's `engines` all name 24.22.1, and so does the node stage in
 # deploy/Dockerfile. A NodeSource "24.x" would drift away from that silently.
 #
 # Copying /usr/local wholesale would bury the Go toolchain that lives there, so
 # only Node's own files come across, and the npm/npx entry points are relinked.
-COPY --from=node:24.18.1-trixie-slim /usr/local/lib/node_modules /usr/local/lib/node_modules
-COPY --from=node:24.18.1-trixie-slim /usr/local/bin/node /usr/local/bin/node
+COPY --from=node:24.22.1-trixie-slim /usr/local/lib/node_modules /usr/local/lib/node_modules
+COPY --from=node:24.22.1-trixie-slim /usr/local/bin/node /usr/local/bin/node
 RUN ln -sf /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
 	&& ln -sf /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx \
 	&& ln -sf /usr/local/lib/node_modules/corepack/dist/corepack.js /usr/local/bin/corepack \

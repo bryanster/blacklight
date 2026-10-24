@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class ServiceTokenStatus(str, Enum):
+class ServiceTokenStatus(StrEnum):
     ACTIVE = "active"
     EXPIRED = "expired"
     REVOKED = "revoked"

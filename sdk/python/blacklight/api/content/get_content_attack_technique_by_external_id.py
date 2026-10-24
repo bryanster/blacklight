@@ -84,13 +84,13 @@ def sync_detailed(
     *,
     client: AuthenticatedClient | Client,
 ) -> Response[ContentTechnique | Problem]:
-    r"""Resolve a technique by ATT&CK version and MITRE id.
+    """Resolve a technique by ATT&CK version and MITRE id.
 
      Any authenticated subject. Looks up the technique natural key inside
     **exactly** the named version. Never falls back to another installed
     version — a technique that exists only in `15.1` is `404` under `14.1`.
 
-    The version path param is required; there is no default \"latest\" on
+    The version path param is required; there is no default "latest" on
     this pin-sensitive endpoint.
 
     Args:
@@ -123,13 +123,13 @@ def sync(
     *,
     client: AuthenticatedClient | Client,
 ) -> ContentTechnique | Problem | None:
-    r"""Resolve a technique by ATT&CK version and MITRE id.
+    """Resolve a technique by ATT&CK version and MITRE id.
 
      Any authenticated subject. Looks up the technique natural key inside
     **exactly** the named version. Never falls back to another installed
     version — a technique that exists only in `15.1` is `404` under `14.1`.
 
-    The version path param is required; there is no default \"latest\" on
+    The version path param is required; there is no default "latest" on
     this pin-sensitive endpoint.
 
     Args:
@@ -157,13 +157,13 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient | Client,
 ) -> Response[ContentTechnique | Problem]:
-    r"""Resolve a technique by ATT&CK version and MITRE id.
+    """Resolve a technique by ATT&CK version and MITRE id.
 
      Any authenticated subject. Looks up the technique natural key inside
     **exactly** the named version. Never falls back to another installed
     version — a technique that exists only in `15.1` is `404` under `14.1`.
 
-    The version path param is required; there is no default \"latest\" on
+    The version path param is required; there is no default "latest" on
     this pin-sensitive endpoint.
 
     Args:
@@ -194,13 +194,13 @@ async def asyncio(
     *,
     client: AuthenticatedClient | Client,
 ) -> ContentTechnique | Problem | None:
-    r"""Resolve a technique by ATT&CK version and MITRE id.
+    """Resolve a technique by ATT&CK version and MITRE id.
 
      Any authenticated subject. Looks up the technique natural key inside
     **exactly** the named version. Never falls back to another installed
     version — a technique that exists only in `15.1` is `404` under `14.1`.
 
-    The version path param is required; there is no default \"latest\" on
+    The version path param is required; there is no default "latest" on
     this pin-sensitive endpoint.
 
     Args:

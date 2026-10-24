@@ -30,7 +30,7 @@ GO_PACKAGES := ./api/... ./cmd/... ./internal/... ./tools/... ./web
 # and conflicts with ordinary library upgrades, so it is installed with an
 # explicit @version instead of via tools/tools.go. Generators, whose output must
 # be byte-identical everywhere, are pinned in go.mod — see tools/tools.go.
-GOLANGCI_LINT_VERSION := v2.13.2
+GOLANGCI_LINT_VERSION := v2.15.0
 
 # Version stamping. Overridable so a release pipeline can pass exact values.
 # TestLDFlagsPopulateInfo asserts these -X paths still resolve.

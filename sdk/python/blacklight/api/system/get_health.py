@@ -57,11 +57,11 @@ def sync_detailed(
     *,
     client: AuthenticatedClient | Client,
 ) -> Response[Health | Problem]:
-    r"""Report whether the server and its dependencies are healthy.
+    """Report whether the server and its dependencies are healthy.
 
      Public by design: an orchestrator or uptime monitor has to be able to call
     this without credentials, and a health check that needs a session reports
-    \"unhealthy\" whenever authentication itself breaks.
+    "unhealthy" whenever authentication itself breaks.
 
     Returns 200 when every check is `ok`, and 503 when any check is `error`.
     The body is the same shape either way — the caller reads `checks` to find
@@ -89,11 +89,11 @@ def sync(
     *,
     client: AuthenticatedClient | Client,
 ) -> Health | Problem | None:
-    r"""Report whether the server and its dependencies are healthy.
+    """Report whether the server and its dependencies are healthy.
 
      Public by design: an orchestrator or uptime monitor has to be able to call
     this without credentials, and a health check that needs a session reports
-    \"unhealthy\" whenever authentication itself breaks.
+    "unhealthy" whenever authentication itself breaks.
 
     Returns 200 when every check is `ok`, and 503 when any check is `error`.
     The body is the same shape either way — the caller reads `checks` to find
@@ -117,11 +117,11 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient | Client,
 ) -> Response[Health | Problem]:
-    r"""Report whether the server and its dependencies are healthy.
+    """Report whether the server and its dependencies are healthy.
 
      Public by design: an orchestrator or uptime monitor has to be able to call
     this without credentials, and a health check that needs a session reports
-    \"unhealthy\" whenever authentication itself breaks.
+    "unhealthy" whenever authentication itself breaks.
 
     Returns 200 when every check is `ok`, and 503 when any check is `error`.
     The body is the same shape either way — the caller reads `checks` to find
@@ -147,11 +147,11 @@ async def asyncio(
     *,
     client: AuthenticatedClient | Client,
 ) -> Health | Problem | None:
-    r"""Report whether the server and its dependencies are healthy.
+    """Report whether the server and its dependencies are healthy.
 
      Public by design: an orchestrator or uptime monitor has to be able to call
     this without credentials, and a health check that needs a session reports
-    \"unhealthy\" whenever authentication itself breaks.
+    "unhealthy" whenever authentication itself breaks.
 
     Returns 200 when every check is `ok`, and 503 when any check is `error`.
     The body is the same shape either way — the caller reads `checks` to find

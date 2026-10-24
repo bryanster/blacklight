@@ -26,7 +26,7 @@ class PresenceHeartbeat:
     focus: PresenceHeartbeatFocus | Unset = UNSET
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.presence_heartbeat_focus import PresenceHeartbeatFocus
+        from ..models.presence_heartbeat_focus import PresenceHeartbeatFocus  # noqa: PLC0415
 
         presence_id = str(self.presence_id)
 
@@ -48,7 +48,7 @@ class PresenceHeartbeat:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.presence_heartbeat_focus import PresenceHeartbeatFocus
+        from ..models.presence_heartbeat_focus import PresenceHeartbeatFocus  # noqa: PLC0415
 
         d = dict(src_dict)
         presence_id = UUID(d.pop("presenceId"))

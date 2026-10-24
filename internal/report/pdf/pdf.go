@@ -15,6 +15,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/chromedp/cdproto/cdp"
 	"github.com/chromedp/cdproto/page"
 	"github.com/chromedp/chromedp"
 )
@@ -114,42 +115,36 @@ func (p *Printer) RenderPDF(ctx context.Context, html []byte) ([]byte, error) {
 	// Ensure the tab is closed before unlocking the browser.
 	defer func() { chromedp.Cancel(tabCtx) }() //nolint:errcheck
 
-	var pdfBytes []byte
-
-	err := chromedp.Run(tabCtx, //nolint:contextcheck // tabCtx derives from allocator context
-		chromedp.ActionFunc(func(ctx context.Context) error {
-			// Load a blank page first so we have a frame to target.
-			frameTree, err := page.GetFrameTree().Do(ctx)
-			if err != nil {
-				return fmt.Errorf("pdf: get frame tree: %w", err)
-			}
-			if frameTree == nil || frameTree.Frame == nil {
-				return errors.New("pdf: no frame available")
-			}
-			if err := page.SetDocumentContent(frameTree.Frame.ID, string(html)).Do(ctx); err != nil {
-				return fmt.Errorf("pdf: set document content: %w", err)
-			}
-			return nil
-		}),
-		chromedp.ActionFunc(func(ctx context.Context) error {
-			data, _, err := page.PrintToPDF().
-				WithPrintBackground(true).
-				WithPaperWidth(a4Width).
-				WithPaperHeight(a4Height).
-				WithMarginTop(0.4).
-				WithMarginBottom(0.4).
-				WithMarginLeft(0.4).
-				WithMarginRight(0.4).
-				Do(ctx)
-			if err != nil {
-				return fmt.Errorf("pdf: print to PDF: %w", err)
-			}
-			pdfBytes = data
-			return nil
-		}),
-	)
+	//nolint:contextcheck // tabCtx derives from allocator context
+	err := chromedp.Do(tabCtx, chromedp.Func(func(ctx context.Context, t *chromedp.Target) error {
+		// Load a blank page first so we have a frame to target.
+		res, err := cdp.Call(ctx, t, page.GetFrameTree, cdp.Empty{})
+		if err != nil {
+			return fmt.Errorf("pdf: get frame tree: %w", err)
+		}
+		if res.FrameTree == nil || res.FrameTree.Frame == nil {
+			return errors.New("pdf: no frame available")
+		}
+		if _, err := cdp.Call(ctx, t, page.SetDocumentContent, page.SetDocumentContentParams{
+			FrameID: res.FrameTree.Frame.ID,
+			HTML:    string(html),
+		}); err != nil {
+			return fmt.Errorf("pdf: set document content: %w", err)
+		}
+		return nil
+	}))
 	if err != nil {
 		return nil, err
+	}
+
+	//nolint:contextcheck // tabCtx derives from allocator context
+	pdfBytes, err := chromedp.Run(tabCtx, chromedp.PrintToPDF(
+		chromedp.PDFPrintBackground(),
+		chromedp.PDFPaper(chromedp.PaperSize{Width: a4Width, Height: a4Height}),
+		chromedp.PDFMargin(0.4),
+	))
+	if err != nil {
+		return nil, fmt.Errorf("pdf: print to PDF: %w", err)
 	}
 
 	if len(pdfBytes) == 0 {

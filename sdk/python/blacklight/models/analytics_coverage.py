@@ -25,8 +25,8 @@ class AnalyticsCoverage:
     blind_filtered: bool
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.tactic_coverage import TacticCoverage
-        from ..models.technique_coverage import TechniqueCoverage
+        from ..models.tactic_coverage import TacticCoverage  # noqa: PLC0415
+        from ..models.technique_coverage import TechniqueCoverage  # noqa: PLC0415
 
         techniques = self.techniques.to_dict()
 
@@ -48,8 +48,8 @@ class AnalyticsCoverage:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.tactic_coverage import TacticCoverage
-        from ..models.technique_coverage import TechniqueCoverage
+        from ..models.tactic_coverage import TacticCoverage  # noqa: PLC0415
+        from ..models.technique_coverage import TechniqueCoverage  # noqa: PLC0415
 
         d = dict(src_dict)
         techniques = TechniqueCoverage.from_dict(d.pop("techniques"))

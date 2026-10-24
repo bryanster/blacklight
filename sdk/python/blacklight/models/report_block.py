@@ -28,7 +28,7 @@ class ReportBlock:
     """ Block parameters, validated against the registry's ParamSchema. """
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.report_block_params import ReportBlockParams
+        from ..models.report_block_params import ReportBlockParams  # noqa: PLC0415
 
         id = str(self.id)
 
@@ -53,7 +53,7 @@ class ReportBlock:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.report_block_params import ReportBlockParams
+        from ..models.report_block_params import ReportBlockParams  # noqa: PLC0415
 
         d = dict(src_dict)
         id = UUID(d.pop("id"))

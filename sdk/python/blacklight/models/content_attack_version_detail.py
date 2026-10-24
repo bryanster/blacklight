@@ -38,7 +38,7 @@ class ContentAttackVersionDetail:
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.content_attack_version_counts import ContentAttackVersionCounts
+        from ..models.content_attack_version_counts import ContentAttackVersionCounts  # noqa: PLC0415
 
         version = self.version
 
@@ -72,7 +72,7 @@ class ContentAttackVersionDetail:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.content_attack_version_counts import ContentAttackVersionCounts
+        from ..models.content_attack_version_counts import ContentAttackVersionCounts  # noqa: PLC0415
 
         d = dict(src_dict)
         version = d.pop("version")

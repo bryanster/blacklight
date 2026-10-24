@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class ContentSourceStatus(str, Enum):
+class ContentSourceStatus(StrEnum):
     ERROR = "error"
     IDLE = "idle"
     SYNCING = "syncing"

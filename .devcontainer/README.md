@@ -21,7 +21,7 @@ docker volume rm blacklight-go-mod blacklight-go-build
 | | |
 |---|---|
 | Go 1.26, gcc | The server. cgo, so a C compiler is not optional |
-| Node 24.18.1 | Exactly the version in `.prototools`, `web/.nvmrc` and `web/package.json` — copied from the official image rather than installed from a distribution repo, which would drift |
+| Node 24.22.1 | Exactly the version in `.prototools`, `web/.nvmrc` and `web/package.json` — copied from the official image rather than installed from a distribution repo, which would drift |
 | `make`, git, jq | The Makefile is the interface to this repository |
 | Docker CLI | Via the `docker-outside-of-docker` feature, pointed at the host daemon — so `make docker-build` and `make docker-smoke` work, sharing the host's layer cache |
 | Azure CLI (`az`) | Via the `azure-cli` feature. The Microsoft apt repo carries no trixie suite, so the feature falls back to a pipx install under `/usr/local/pipx` — a slower build, the same `az` on the PATH. Host `~/.azure` is bind-mounted, so `az login` survives rebuilds |

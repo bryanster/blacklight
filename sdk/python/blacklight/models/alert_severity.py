@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class AlertSeverity(str, Enum):
+class AlertSeverity(StrEnum):
     CRITICAL = "critical"
     HIGH = "high"
     INFO = "info"

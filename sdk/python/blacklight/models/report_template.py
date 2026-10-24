@@ -33,7 +33,7 @@ class ReportTemplate:
     endpoints. """
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.report_template_block import ReportTemplateBlock
+        from ..models.report_template_block import ReportTemplateBlock  # noqa: PLC0415
 
         id = str(self.id)
 
@@ -73,7 +73,7 @@ class ReportTemplate:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.report_template_block import ReportTemplateBlock
+        from ..models.report_template_block import ReportTemplateBlock  # noqa: PLC0415
 
         d = dict(src_dict)
         id = UUID(d.pop("id"))

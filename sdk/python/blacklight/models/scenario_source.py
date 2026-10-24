@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class ScenarioSource(str, Enum):
+class ScenarioSource(StrEnum):
     CTID = "ctid"
     IMPORTED = "imported"
     MANUAL = "manual"

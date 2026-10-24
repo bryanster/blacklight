@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/bryanster/blacklight/internal/httpapi/apierr"
 )
@@ -152,48 +153,48 @@ func (r *Scenarios) Update(ctx context.Context, id string, changes ScenarioUpdat
 	return result, nil
 }
 
-const deleteScenarioGraph = `
-	DELETE FROM app.comment_revision WHERE comment_id IN (SELECT id FROM app."comment" WHERE execution_id IN (SELECT e.id FROM app.execution e WHERE e.step_id IN (SELECT s.id FROM app.step s WHERE s.scenario_id = ?)));
-	DELETE FROM app.evidence WHERE execution_id IN (SELECT e.id FROM app.execution e WHERE e.step_id IN (SELECT s.id FROM app.step s WHERE s.scenario_id = ?)) OR comment_id IN (SELECT id FROM app."comment" WHERE execution_id IN (SELECT e.id FROM app.execution e WHERE e.step_id IN (SELECT s.id FROM app.step s WHERE s.scenario_id = ?)));
-	DELETE FROM app."comment" WHERE execution_id IN (SELECT e.id FROM app.execution e WHERE e.step_id IN (SELECT s.id FROM app.step s WHERE s.scenario_id = ?));
-	DELETE FROM app.finding_step WHERE step_id IN (SELECT id FROM app.step WHERE scenario_id = ?);
-	DELETE FROM app.execution WHERE step_id IN (SELECT id FROM app.step WHERE scenario_id = ?);
-	DELETE FROM app.step WHERE scenario_id = ?;
-	DELETE FROM app.scenario WHERE id = ?;
-	DELETE FROM app.activity WHERE engagement_id IN (SELECT engagement_id FROM app.scenario WHERE id = ?) AND object_id = ?;
-`
+// deleteScenarioGraph is the ordered list of statements that erase a scenario
+// and everything hanging off it.
+//
+// It is a list run one committed statement at a time, not one
+// semicolon-separated script, for the two DuckDB reasons [deleteEngagementGraph]
+// documents in full: parameters cannot be bound across a multi-statement Exec,
+// so a script with a `?` in every statement never runs at all; and a RESTRICT
+// foreign key is enforced against the child's index rather than the current
+// transaction's own deletes, so a child and its parent cannot be removed in the
+// same transaction.
+//
+// The activity row for the scenario is removed while the scenario still exists,
+// because its engagement_id comes from the scenario row itself. Child activity
+// rows (steps, executions) are left for a later ticket, as they always were.
+var deleteScenarioGraph = []string{
+	`DELETE FROM app.comment_revision WHERE comment_id IN (SELECT id FROM app."comment" WHERE execution_id IN (SELECT e.id FROM app.execution e WHERE e.step_id IN (SELECT s.id FROM app.step s WHERE s.scenario_id = ?)))`,
+	`DELETE FROM app.evidence WHERE execution_id IN (SELECT e.id FROM app.execution e WHERE e.step_id IN (SELECT s.id FROM app.step s WHERE s.scenario_id = ?)) OR comment_id IN (SELECT id FROM app."comment" WHERE execution_id IN (SELECT e.id FROM app.execution e WHERE e.step_id IN (SELECT s.id FROM app.step s WHERE s.scenario_id = ?)))`,
+	`DELETE FROM app."comment" WHERE execution_id IN (SELECT e.id FROM app.execution e WHERE e.step_id IN (SELECT s.id FROM app.step s WHERE s.scenario_id = ?))`,
+	`DELETE FROM app.finding_step WHERE step_id IN (SELECT id FROM app.step WHERE scenario_id = ?)`,
+	`DELETE FROM app.execution WHERE step_id IN (SELECT id FROM app.step WHERE scenario_id = ?)`,
+	`DELETE FROM app.step WHERE scenario_id = ?`,
+	`DELETE FROM app.activity WHERE engagement_id IN (SELECT engagement_id FROM app.scenario WHERE id = ?) AND object_id = ?`,
+	`DELETE FROM app.scenario WHERE id = ?`,
+}
 
 // Delete removes a scenario and its whole graph. The order respects FK
 // RESTRICT constraints so child rows are dropped before their parents.
-// Activity rows are cleaned up by object_id for the scenario itself; child
-// activity rows (steps, executions) are left for a later ticket.
 func (r *Scenarios) Delete(ctx context.Context, id string) error {
-	return r.db.Write(ctx, func(tx *sql.Tx) error {
-		_, err := tx.ExecContext(ctx, deleteScenarioGraph,
-			// comment_revision
-			id,
-			// evidence (execution parent)
-			id,
-			// evidence (comment parent) — second position for second occurrence
-			id,
-			// comment
-			id,
-			// finding_step
-			id,
-			// execution
-			id,
-			// step
-			id,
-			// scenario
-			id,
-			// activity
-			id, id,
-		)
+	for _, stmt := range deleteScenarioGraph {
+		args := make([]any, strings.Count(stmt, "?"))
+		for i := range args {
+			args[i] = id
+		}
+		err := r.db.Write(ctx, func(tx *sql.Tx) error {
+			_, err := tx.ExecContext(ctx, stmt, args...)
+			return err
+		})
 		if err != nil {
 			return fmt.Errorf("scenario: delete %q: %w", id, err)
 		}
-		return nil
-	})
+	}
+	return nil
 }
 
 const updateScenarioOrdinals = `UPDATE app.scenario SET ordinal = ?, updated_at = ? WHERE id = ?`

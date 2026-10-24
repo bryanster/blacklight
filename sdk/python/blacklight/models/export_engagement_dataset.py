@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class ExportEngagementDataset(str, Enum):
+class ExportEngagementDataset(StrEnum):
     COVERAGE = "coverage"
     EXECUTIONS = "executions"
     FINDINGS = "findings"

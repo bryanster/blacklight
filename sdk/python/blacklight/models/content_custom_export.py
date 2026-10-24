@@ -36,10 +36,10 @@ class ContentCustomExport:
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.content_custom_export_meta import ContentCustomExportMeta
-        from ..models.content_detection_rule import ContentDetectionRule
-        from ..models.content_note import ContentNote
-        from ..models.content_procedure_template import ContentProcedureTemplate
+        from ..models.content_custom_export_meta import ContentCustomExportMeta  # noqa: PLC0415
+        from ..models.content_detection_rule import ContentDetectionRule  # noqa: PLC0415
+        from ..models.content_note import ContentNote  # noqa: PLC0415
+        from ..models.content_procedure_template import ContentProcedureTemplate  # noqa: PLC0415
 
         meta = self.meta.to_dict()
 
@@ -73,10 +73,10 @@ class ContentCustomExport:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.content_custom_export_meta import ContentCustomExportMeta
-        from ..models.content_detection_rule import ContentDetectionRule
-        from ..models.content_note import ContentNote
-        from ..models.content_procedure_template import ContentProcedureTemplate
+        from ..models.content_custom_export_meta import ContentCustomExportMeta  # noqa: PLC0415
+        from ..models.content_detection_rule import ContentDetectionRule  # noqa: PLC0415
+        from ..models.content_note import ContentNote  # noqa: PLC0415
+        from ..models.content_procedure_template import ContentProcedureTemplate  # noqa: PLC0415
 
         d = dict(src_dict)
         meta = ContentCustomExportMeta.from_dict(d.pop("meta"))

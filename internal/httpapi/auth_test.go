@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	"math"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -382,18 +383,35 @@ func withoutInstance(t *testing.T, recorder *httptest.ResponseRecorder) string {
 // margin is deliberately wide: what it is looking for is the difference between
 // an Argon2id derivation running and not running at all, which is two orders of
 // magnitude and not a few percent.
+//
+// Each side is measured several times and the fastest run of each compared. A
+// single sample of each is a coin flip on a loaded machine — both sides inflate,
+// and whichever request happened to land on a busy scheduler slice decides the
+// ratio — while the fastest run is the closest either side gets to its
+// uncontended cost, which is the work this asserts.
 func TestAnUnknownAddressCostsAHashToo(t *testing.T) {
 	t.Parallel()
 
-	server := newAuthServer(t)
+	server := newAuthServer(t, func(cfg *config.Config) {
+		// Several attempts per address are needed for a fastest-of comparison;
+		// the account lockout would otherwise cut the wrong-password side short
+		// at five. This test is about timing, not throttling.
+		cfg.Throttle.AccountFailures = 100
+	})
 	server.seedUser(t)
 
 	measure := func(email string) time.Duration {
-		start := time.Now()
-		if got := server.login(email, "not the right password").Code; got != http.StatusUnauthorized {
-			t.Fatalf("login = %d, want 401", got)
+		best := time.Duration(math.MaxInt64)
+		for range 5 {
+			start := time.Now()
+			if got := server.login(email, "not the right password").Code; got != http.StatusUnauthorized {
+				t.Fatalf("login = %d, want 401", got)
+			}
+			if elapsed := time.Since(start); elapsed < best {
+				best = elapsed
+			}
 		}
-		return time.Since(start)
+		return best
 	}
 
 	wrongPassword := measure(testEmail)
