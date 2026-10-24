@@ -13,6 +13,12 @@
 #
 # Both architectures are scanned: the runtime stage installs packages per
 # platform, so arm64 can carry a different package set from amd64.
+#
+# Only the production image (:latest, from main) uploads to code scanning.
+# Every upload replaces the previous results for its category on that branch,
+# so a manual scan of an older tag would reopen that release's alerts until the
+# next :latest scan closed them again. Any other tag, or a run from another
+# branch, writes the job summary only.
 
 name: Image scan
 
@@ -37,6 +43,8 @@ concurrency:
 
 env:
   IMAGE: ghcr.io/bryanster/blacklight:${{ inputs.tag || 'latest' }}
+  # 'true' only for the production image scanned from main; gates the upload.
+  PRODUCTION: ${{ (inputs.tag || 'latest') == 'latest' && github.ref == 'refs/heads/main' }}
 
 jobs:
   scan:
@@ -64,8 +72,9 @@ jobs:
           echo "digest=${digest}" >> "$GITHUB_OUTPUT"
 
       # Full report for code scanning: every severity, unfixed included, so
-      # the Security tab is the complete picture.
+      # the Security tab is the complete picture. Production image only.
       - name: Scan (SARIF)
+        if: env.PRODUCTION == 'true'
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
           image-ref: ${{ env.IMAGE }}
@@ -79,32 +88,41 @@ jobs:
           TRIVY_PLATFORM: linux/${{ matrix.arch }}
 
       - name: Upload to code scanning
+        if: env.PRODUCTION == 'true'
         uses: github/codeql-action/upload-sarif@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
         with:
           sarif_file: trivy-${{ matrix.arch }}.sarif
           category: image-linux-${{ matrix.arch }}
 
-      # Readable summary: only what is both serious and fixable.
+      # Readable summary: only what is both serious and fixable. On a
+      # production run it reuses the Trivy install and database from the SARIF
+      # scan; otherwise that scan was skipped and this step sets both up itself.
       - name: Scan (summary)
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
           image-ref: ${{ env.IMAGE }}
           scanners: vuln
+          version: v0.76.1
           format: table
           severity: HIGH,CRITICAL
           ignore-unfixed: true
           output: trivy-${{ matrix.arch }}.txt
           exit-code: '0'
-          skip-setup-trivy: true
+          skip-setup-trivy: ${{ env.PRODUCTION == 'true' }}
         env:
           TRIVY_PLATFORM: linux/${{ matrix.arch }}
-          TRIVY_SKIP_DB_UPDATE: true
+          TRIVY_SKIP_DB_UPDATE: ${{ env.PRODUCTION == 'true' }}
 
       - name: Write the job summary
         run: |
           {
             echo "### linux/${{ matrix.arch }}"
             echo "Scanned \`${{ steps.pull.outputs.digest }}\`"
+            if [[ "${PRODUCTION}" == 'true' ]]; then
+              echo "Results uploaded to code scanning."
+            else
+              echo "Not the production image (:latest on main), so nothing was uploaded to code scanning."
+            fi
             echo
             echo "HIGH/CRITICAL with a fix available:"
             echo '```'

@@ -20,16 +20,20 @@
 # options — see docs/deploy.md. Keeping the same distribution release in the
 # build and runtime stages is what guarantees the glibc the binary was linked
 # against is the glibc it finds at runtime.
-ARG DEBIAN_RELEASE=trixie
-ARG GO_VERSION=1.26
-ARG NODE_VERSION=24.22.1
+#
+# The base images are written out literally and pinned by digest, not built
+# from ARGs: Dependabot (the docker ecosystem in .github/dependabot.yml) skips
+# a FROM that uses variables, and only bumps a floating tag like trixie-slim
+# when it carries a digest. Its PRs move the digest whenever the upstream image
+# is rebuilt, which is how base-image security fixes reach this file. All three
+# must stay on the same Debian release (trixie), for the glibc reason above.
 
 # ─── Stage 1 · the single-page app ────────────────────────────────────────────
 #
 # Pinned to BUILDPLATFORM: the output is JavaScript, which is the same bytes
 # whatever the target architecture, so there is no reason to run this under
 # emulation when building an arm64 image on an amd64 host (or the reverse).
-FROM --platform=$BUILDPLATFORM node:${NODE_VERSION}-${DEBIAN_RELEASE}-slim AS web
+FROM --platform=$BUILDPLATFORM node:24.22.1-trixie-slim@sha256:43b9ba1142b8dcf33fa8f922ca1be85714adc444e0586c7cf7726daaeabc1bea AS web
 
 WORKDIR /src/web
 
@@ -55,7 +59,7 @@ RUN npm run build
 # target the other architecture too. Compiling natively for the host and
 # cross-compiling for the other architecture take about the same time; only the
 # runtime stage's `apt-get` runs emulated, and apt survives QEMU fine.
-FROM --platform=$BUILDPLATFORM golang:${GO_VERSION}-${DEBIAN_RELEASE} AS build
+FROM --platform=$BUILDPLATFORM golang:1.26-trixie@sha256:909771fef53e3dcb0950255f0c9a8b4728c3b841e61509c7b29b098de7ee02d4 AS build
 
 # Set by BuildKit, always, no default needed.
 ARG BUILDARCH
@@ -129,7 +133,7 @@ RUN --mount=type=cache,target=/go/pkg/mod,sharing=locked \
     go build -trimpath -ldflags "$ldflags" -o /out/blctl ./cmd/blctl
 
 # ─── Stage 3 · runtime ────────────────────────────────────────────────────────
-FROM debian:${DEBIAN_RELEASE}-slim AS runtime
+FROM debian:trixie-slim@sha256:62bd423aeee912639ca8ee681c2b762cb3e25137e0a92b20be455898a9f034ad AS runtime
 
 # chromium + chromium-sandbox: M6 renders PDFs by driving headless Chromium, and
 #   discovering that at the end of M6 would be a packaging problem found too
