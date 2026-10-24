@@ -48,7 +48,7 @@ jobs:
         arch: [amd64, arm64]
     steps:
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
+        uses: docker/login-action@81c6f93d4bc991e510b342a00b419b3bb4efc5c6 # v4.7.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -70,6 +70,8 @@ jobs:
         with:
           image-ref: ${{ env.IMAGE }}
           scanners: vuln
+          # The action pins an older default Trivy; keep this on the latest release.
+          version: v0.76.1
           format: sarif
           output: trivy-${{ matrix.arch }}.sarif
           exit-code: '0'
@@ -77,7 +79,7 @@ jobs:
           TRIVY_PLATFORM: linux/${{ matrix.arch }}
 
       - name: Upload to code scanning
-        uses: github/codeql-action/upload-sarif@6f2ac81f5cd81fe351a197ba0b00d91d03cd2aee # v4.39.0
+        uses: github/codeql-action/upload-sarif@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
         with:
           sarif_file: trivy-${{ matrix.arch }}.sarif
           category: image-linux-${{ matrix.arch }}
