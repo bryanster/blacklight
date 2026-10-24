@@ -55,7 +55,7 @@ Everything is optional; these are the defaults.
 |---|---|---|
 | `name` | `blacklight` | Names the Container App, environment, workspace and identity, and the first label of the app's hostname |
 | `locationOverride` | *(empty)* | Region for every resource. Empty means the resource group's own region, which is what you want when the button creates the group. Set it only to place the resources somewhere else — see [Troubleshooting](#troubleshooting) |
-| `image` / `imageTag` | `ghcr.io/bryanster/blacklight` / `v1.0.2` | The image to run. Pin a release |
+| `image` / `imageTag` | `ghcr.io/bryanster/blacklight` / `v1.0.4` | The image to run. Pin a release |
 | `containerCpu` / `containerMemory` | `1` / `2Gi` | Container size. Must be a valid Consumption-plan pair |
 | `storageShareQuotaGb` | `100` | Size of the Azure Files share |
 | `adminEmail` | *(empty)* | Set it and the app creates that first administrator; leave it empty and no account is created |
@@ -126,10 +126,10 @@ az deployment group create \
   --resource-group <your-rg> \
   --template-file deploy/azure-arm/azuredeploy.json \
   --parameters @deploy/azure-arm/azuredeploy.parameters.json \
-  --parameters createSecrets=false imageTag=v1.0.3
+  --parameters createSecrets=false imageTag=v1.0.4
 ```
 
-`az containerapp update --image ghcr.io/bryanster/blacklight:v1.0.3` does the same thing for that one
+`az containerapp update --image ghcr.io/bryanster/blacklight:v1.0.4` does the same thing for that one
 field, and cannot touch the secrets at all.
 
 To rotate a secret deliberately, write the new value to Key Vault and restart the revision — Container

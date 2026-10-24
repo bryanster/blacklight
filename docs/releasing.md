@@ -25,6 +25,22 @@ filled in that ticket. For earlier releases or release candidates:
 ## [1.0.0] — 2026-08-15
 ```
 
+In the same change, point the deployment examples at the new tag. The
+**Deploy to Azure** button deploys `deploy/azure-arm/azuredeploy.json` straight
+from `main`, so its `imageTag` default is what every new one-click install
+runs:
+
+- `deploy/azure-arm/azuredeploy.json` — `imageTag` `defaultValue`
+- `deploy/azure-arm/azuredeploy.parameters.json` — `imageTag`
+- `deploy/azure-terraform/variables.tf` and `terraform.tfvars.example` — `image_tag`
+- `README.md` — the status line, and `deploy/azure-arm/README.md` — the
+  parameter table and upgrade examples
+
+`TestDeployPinsMatchLatestRelease` (`internal/version`) fails CI until the
+first five match the newest `## [x.y.z]` section, so a release cannot merge
+with a stale button. The button names an image that does not exist until the
+tag's release workflow finishes, so push the tag promptly after merging.
+
 Commit that change to `main` and push. CI must pass.
 
 ### 2. Tag
