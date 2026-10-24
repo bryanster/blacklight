@@ -59,7 +59,7 @@ RUN npm run build
 # target the other architecture too. Compiling natively for the host and
 # cross-compiling for the other architecture take about the same time; only the
 # runtime stage's `apt-get` runs emulated, and apt survives QEMU fine.
-FROM --platform=$BUILDPLATFORM golang:1.26-trixie@sha256:909771fef53e3dcb0950255f0c9a8b4728c3b841e61509c7b29b098de7ee02d4 AS build
+FROM --platform=$BUILDPLATFORM golang:1.27-trixie@sha256:fbb7ae40b62ff8afe31662df570d39b4f5052ac32b90dae8e60d7657a20a74f4 AS build
 
 # Set by BuildKit, always, no default needed.
 ARG BUILDARCH
