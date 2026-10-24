@@ -23,7 +23,7 @@ variable "image" {
 
 variable "image_tag" {
   type        = string
-  default     = "v1.0.2"
+  default     = "v1.0.4"
   description = "Container image tag. Pin to a release for reproducible deployments. v1.0.1 is the first release that can create the first administrator from admin_email below."
 }
 

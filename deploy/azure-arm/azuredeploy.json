@@ -30,7 +30,7 @@
     },
     "imageTag": {
       "type": "string",
-      "defaultValue": "v1.0.2",
+      "defaultValue": "v1.0.4",
       "metadata": {
         "description": "Container image tag. Pin to a release for reproducible deployments. v1.0.1 is the first release that can create the first administrator from adminEmail below."
       }
