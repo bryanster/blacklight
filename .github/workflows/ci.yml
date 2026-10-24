@@ -371,6 +371,39 @@ jobs:
       - name: Build the image and smoke-test it
         run: make docker-smoke IMAGE_TAG=ci
 
+      # Vulnerability scan of the image this change builds, so a pull request
+      # shows what it would ship before it is released. Report-only: a CVE
+      # published against the base image this morning should not block an
+      # unrelated change. Fixable HIGH/CRITICAL findings raise a warning on
+      # the run; the full table is in the job summary. Results stay in the run
+      # rather than code scanning, because fork PRs get no security-events
+      # permission — the weekly scan in image-scan.yml covers that side.
+      - name: Scan the image for vulnerabilities
+        id: trivy
+        continue-on-error: true
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          image-ref: blacklight:ci
+          scanners: vuln
+          format: table
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          output: trivy.txt
+          exit-code: '1'
+
+      - name: Report the scan
+        if: always() && steps.trivy.outcome != 'skipped'
+        run: |
+          {
+            echo '### Image vulnerabilities (HIGH/CRITICAL, fix available)'
+            echo '```'
+            cat trivy.txt 2>/dev/null || echo 'The scan produced no report — see the step log.'
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          if [[ "${{ steps.trivy.outcome }}" == 'failure' ]]; then
+            echo '::warning title=Image vulnerabilities::The image has fixable HIGH/CRITICAL vulnerabilities. See the job summary.'
+          fi
+
   # ── end to end ──────────────────────────────────────────────────────────────
   #
   # A browser against the real binary: the SPA this build embedded, served over
