@@ -70,6 +70,8 @@ jobs:
         with:
           image-ref: ${{ env.IMAGE }}
           scanners: vuln
+          # The action pins an older default Trivy; keep this on the latest release.
+          version: v0.76.1
           format: sarif
           output: trivy-${{ matrix.arch }}.sarif
           exit-code: '0'
