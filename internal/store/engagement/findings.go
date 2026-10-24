@@ -158,16 +158,28 @@ func (r *Findings) Update(ctx context.Context, id string, in PatchFinding, after
 
 // Delete removes a finding and its history and step rows. Application-enforced
 // cascade: deleting the finding leaves no orphan history.
+//
+// The two child deletes commit on their own before the finding itself, because
+// app.finding_step holds a RESTRICT foreign key to app.finding and DuckDB
+// enforces it against the child's index rather than the current transaction's
+// own deletes — removing the link and its parent in one transaction fails even
+// though the link was deleted moments earlier. See [deleteEngagementGraph] for
+// the full note.
 func (r *Findings) Delete(ctx context.Context, id string, after ...After) error {
+	for _, stmt := range []string{
+		`DELETE FROM app.finding_status_history WHERE finding_id = ?`,
+		`DELETE FROM app.finding_step WHERE finding_id = ?`,
+	} {
+		err := r.db.Write(ctx, func(tx *sql.Tx) error {
+			_, err := tx.ExecContext(ctx, stmt, id)
+			return err
+		})
+		if err != nil {
+			return fmt.Errorf("finding: delete %q: %w", id, err)
+		}
+	}
+
 	return r.db.Write(ctx, func(tx *sql.Tx) error {
-		_, err := tx.ExecContext(ctx, `DELETE FROM app.finding_status_history WHERE finding_id = ?`, id)
-		if err != nil {
-			return fmt.Errorf("finding: delete history: %w", err)
-		}
-		_, err = tx.ExecContext(ctx, `DELETE FROM app.finding_step WHERE finding_id = ?`, id)
-		if err != nil {
-			return fmt.Errorf("finding: delete steps: %w", err)
-		}
 		res, err := tx.ExecContext(ctx, `DELETE FROM app.finding WHERE id = ?`, id)
 		if err != nil {
 			return fmt.Errorf("finding: delete: %w", err)

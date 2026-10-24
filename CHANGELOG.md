@@ -9,6 +9,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Deleting a scenario now removes it and its whole graph (was a 500).**
+  `Scenarios.Delete` ran one semicolon-separated, parameterised script through a
+  single `Exec`. DuckDB binds parameters for the first statement of a
+  multi-statement `Exec` only and rejects the rest with "incorrect argument
+  count for command", so `DELETE
+  /engagements/{engagementId}/scenarios/{scenarioId}` failed for every
+  scenario, empty or not. The
+  graph is now emptied one committed statement at a time — the pattern
+  `Engagements.Delete` already documents — which is also what DuckDB's RESTRICT
+  foreign keys require, since a child and its parent cannot be removed in one
+  transaction. Covered by `internal/engagement/workbook_test.go`.
+- **Deleting a finding now removes its step links (was a 500).**
+  `Findings.Delete` removed `finding_step` and the finding in one transaction;
+  `app.finding_step` holds a RESTRICT foreign key to `app.finding`, which DuckDB
+  enforces against the child's index rather than the transaction's own deletes,
+  so the delete always failed. The child rows now commit before the finding.
+  Covered by `internal/engagement/findings_test.go`.
 - **The SSE catch-up replay path now honours blind mode (BL-006, Medium).**
   Reconnecting with `Last-Event-ID` replays catch-up events rebuilt from the
   activity log, and those rebuilt payloads carried no `revealed` field — so

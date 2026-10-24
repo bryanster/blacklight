@@ -218,6 +218,51 @@ guest claim, HTML view, and revoke → 404 are exercised by
    engagement resource identifier instead of `engagementId`. Admin workaround
    used; member sessions get 404.
 
+## Workbook delete and reorder (known pre-existing bugs)
+
+A coverage pass over `internal/engagement` found the workbook's scenario/step
+delete and reorder paths were never exercised, and two of them do not work.
+Both causes are DuckDB limitations `internal/store/engagement/engagements.go`
+already documents for `deleteEngagementGraph`:
+
+- DuckDB binds parameters for the **first statement of a multi-statement `Exec`
+  only**, so a semicolon-separated script with a `?` in every statement fails
+  with "incorrect argument count for command".
+- A `RESTRICT` foreign key is enforced against the child's index, not the
+  current transaction's own deletes, so a child and its parent cannot be removed
+  in one transaction. DuckDB has no other `ON DELETE` action, and it implements
+  `UPDATE` as delete+insert, so **updating a row that a RESTRICT FK references
+  fails too**.
+
+What is fixed here (see `internal/store/engagement/scenarios.go`,
+`findings.go`, and the tests in `internal/engagement/workbook_test.go`):
+
+- **`Scenarios.Delete`** — was one multi-statement script; now one committed
+  statement at a time, the `deleteEngagementGraph` pattern. `DELETE` of a
+  scenario (with or without children) works.
+- **`Findings.Delete`** — deleted `finding_step` and the finding in one
+  transaction, which the RESTRICT FK rejects; the child rows now commit before
+  the parent. `DELETE` of a finding works.
+
+Still broken, needing a design decision rather than a mechanical fix:
+
+- **`Steps.Delete`** — same multi-statement script as `Scenarios.Delete`, plus a
+  renumber step (`UPDATE app.step SET ordinal = ordinal - 1 …`). The renumber
+  cannot succeed while the remaining steps have executions, because
+  `app.execution.step_id` is a RESTRICT FK and DuckDB rewrites the `UPDATE` as
+  delete+insert. Every step the service creates has an execution, so a step
+  delete is a 500 in production.
+- **`Steps.Reorder` / `Scenarios.Reorder`** — assign ordinals one `UPDATE` at a
+  time. A reorder of rows that have children (steps under a scenario,
+  executions under a step) hits the RESTRICT FK, and even without children the
+  first move can collide with the `(scenario_id, ordinal)` unique constraint
+  before the occupant has moved. Both endpoints fail for any non-trivial
+  workbook.
+
+`internal/engagement/workbook_test.go` covers the rejection paths (incomplete
+set, foreign id, closed engagement) that do work; the success paths are omitted
+until the storage approach changes.
+
 ## Content sync write fairness (M2-016)
 
 Content Apply is the largest write volume in the system and shares the single
