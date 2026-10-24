@@ -53,7 +53,7 @@ class Step:
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.step_procedure import StepProcedure
+        from ..models.step_procedure import StepProcedure  # noqa: PLC0415
 
         id = str(self.id)
 
@@ -132,7 +132,7 @@ class Step:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.step_procedure import StepProcedure
+        from ..models.step_procedure import StepProcedure  # noqa: PLC0415
 
         d = dict(src_dict)
         id = UUID(d.pop("id"))

@@ -41,8 +41,8 @@ class Report:
     """ Draft blocks in ordinal order. Present in GET /reports/{reportId} responses; absent from list endpoints. """
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.report_block import ReportBlock
-        from ..models.report_colours_type_0 import ReportColoursType0
+        from ..models.report_block import ReportBlock  # noqa: PLC0415
+        from ..models.report_colours_type_0 import ReportColoursType0  # noqa: PLC0415
 
         id = str(self.id)
 
@@ -119,8 +119,8 @@ class Report:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.report_block import ReportBlock
-        from ..models.report_colours_type_0 import ReportColoursType0
+        from ..models.report_block import ReportBlock  # noqa: PLC0415
+        from ..models.report_colours_type_0 import ReportColoursType0  # noqa: PLC0415
 
         d = dict(src_dict)
         id = UUID(d.pop("id"))

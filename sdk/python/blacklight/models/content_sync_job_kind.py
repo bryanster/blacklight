@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class ContentSyncJobKind(str, Enum):
+class ContentSyncJobKind(StrEnum):
     BUNDLE_IMPORT = "bundle_import"
     REPROCESS = "reprocess"
     SYNC = "sync"

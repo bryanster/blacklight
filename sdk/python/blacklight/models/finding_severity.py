@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class FindingSeverity(str, Enum):
+class FindingSeverity(StrEnum):
     CRITICAL = "critical"
     HIGH = "high"
     INFO = "info"

@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class ImportCustomContentRequestFormat(str, Enum):
+class ImportCustomContentRequestFormat(StrEnum):
     AUTO = "auto"
     KNOWLEDGEBASE_YAML = "knowledgebase_yaml"
     TESTCASES_JSON = "testcases_json"

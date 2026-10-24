@@ -29,7 +29,7 @@ class NavigatorTechnique:
     show_subtechniques: bool | Unset = UNSET
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.navigator_metadata import NavigatorMetadata
+        from ..models.navigator_metadata import NavigatorMetadata  # noqa: PLC0415
 
         technique_id = self.technique_id
 
@@ -71,7 +71,7 @@ class NavigatorTechnique:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.navigator_metadata import NavigatorMetadata
+        from ..models.navigator_metadata import NavigatorMetadata  # noqa: PLC0415
 
         d = dict(src_dict)
         technique_id = d.pop("techniqueID")

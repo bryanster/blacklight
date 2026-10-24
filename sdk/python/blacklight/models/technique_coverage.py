@@ -26,7 +26,7 @@ class TechniqueCoverage:
     unmatched: int
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.technique_coverage_row import TechniqueCoverageRow
+        from ..models.technique_coverage_row import TechniqueCoverageRow  # noqa: PLC0415
 
         rows = []
         for rows_item_data in self.rows:
@@ -57,7 +57,7 @@ class TechniqueCoverage:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.technique_coverage_row import TechniqueCoverageRow
+        from ..models.technique_coverage_row import TechniqueCoverageRow  # noqa: PLC0415
 
         d = dict(src_dict)
         rows = []

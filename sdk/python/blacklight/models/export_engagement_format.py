@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class ExportEngagementFormat(str, Enum):
+class ExportEngagementFormat(StrEnum):
     CSV = "csv"
     JSON = "json"
 

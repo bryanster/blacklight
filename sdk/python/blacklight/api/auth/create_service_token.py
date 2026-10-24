@@ -93,7 +93,7 @@ def sync_detailed(
     body: CreateServiceTokenRequest,
     x_csrf_token: str | Unset = UNSET,
 ) -> Response[CreatedServiceToken | Problem]:
-    r"""Create a service token, shown once.
+    """Create a service token, shown once.
 
      Mints a token owned by you. **The response is the only time its secret
     exists outside your client** — it is stored as a hash and cannot be
@@ -118,7 +118,7 @@ def sync_detailed(
     A service token cannot call this. Creating credentials takes a signed-in
     session, so that a leaked token cannot mint a longer-lived replacement
     for itself and outlive its own revocation — `403` with `code:
-    \"forbidden\"` when one tries, whatever scopes it carries.
+    "forbidden"` when one tries, whatever scopes it carries.
 
     Args:
         x_csrf_token (str | Unset):
@@ -151,7 +151,7 @@ def sync(
     body: CreateServiceTokenRequest,
     x_csrf_token: str | Unset = UNSET,
 ) -> CreatedServiceToken | Problem | None:
-    r"""Create a service token, shown once.
+    """Create a service token, shown once.
 
      Mints a token owned by you. **The response is the only time its secret
     exists outside your client** — it is stored as a hash and cannot be
@@ -176,7 +176,7 @@ def sync(
     A service token cannot call this. Creating credentials takes a signed-in
     session, so that a leaked token cannot mint a longer-lived replacement
     for itself and outlive its own revocation — `403` with `code:
-    \"forbidden\"` when one tries, whatever scopes it carries.
+    "forbidden"` when one tries, whatever scopes it carries.
 
     Args:
         x_csrf_token (str | Unset):
@@ -204,7 +204,7 @@ async def asyncio_detailed(
     body: CreateServiceTokenRequest,
     x_csrf_token: str | Unset = UNSET,
 ) -> Response[CreatedServiceToken | Problem]:
-    r"""Create a service token, shown once.
+    """Create a service token, shown once.
 
      Mints a token owned by you. **The response is the only time its secret
     exists outside your client** — it is stored as a hash and cannot be
@@ -229,7 +229,7 @@ async def asyncio_detailed(
     A service token cannot call this. Creating credentials takes a signed-in
     session, so that a leaked token cannot mint a longer-lived replacement
     for itself and outlive its own revocation — `403` with `code:
-    \"forbidden\"` when one tries, whatever scopes it carries.
+    "forbidden"` when one tries, whatever scopes it carries.
 
     Args:
         x_csrf_token (str | Unset):
@@ -260,7 +260,7 @@ async def asyncio(
     body: CreateServiceTokenRequest,
     x_csrf_token: str | Unset = UNSET,
 ) -> CreatedServiceToken | Problem | None:
-    r"""Create a service token, shown once.
+    """Create a service token, shown once.
 
      Mints a token owned by you. **The response is the only time its secret
     exists outside your client** — it is stored as a hash and cannot be
@@ -285,7 +285,7 @@ async def asyncio(
     A service token cannot call this. Creating credentials takes a signed-in
     session, so that a leaked token cannot mint a longer-lived replacement
     for itself and outlive its own revocation — `403` with `code:
-    \"forbidden\"` when one tries, whatever scopes it carries.
+    "forbidden"` when one tries, whatever scopes it carries.
 
     Args:
         x_csrf_token (str | Unset):

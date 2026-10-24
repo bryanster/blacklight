@@ -33,7 +33,7 @@ class PresenceEntry:
     focus: PresenceEntryFocus | Unset = UNSET
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.presence_entry_focus import PresenceEntryFocus
+        from ..models.presence_entry_focus import PresenceEntryFocus  # noqa: PLC0415
 
         user_id = str(self.user_id)
 
@@ -64,7 +64,7 @@ class PresenceEntry:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.presence_entry_focus import PresenceEntryFocus
+        from ..models.presence_entry_focus import PresenceEntryFocus  # noqa: PLC0415
 
         d = dict(src_dict)
         user_id = UUID(d.pop("userId"))

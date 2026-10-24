@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class CreateUserRequestStatus(str, Enum):
+class CreateUserRequestStatus(StrEnum):
     ACTIVE = "active"
     INVITED = "invited"
 

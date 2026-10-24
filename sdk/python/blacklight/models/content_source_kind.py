@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class ContentSourceKind(str, Enum):
+class ContentSourceKind(StrEnum):
     ATOMIC = "atomic"
     ATTACK = "attack"
     CTID = "ctid"

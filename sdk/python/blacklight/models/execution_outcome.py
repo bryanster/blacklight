@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class ExecutionOutcome(str, Enum):
+class ExecutionOutcome(StrEnum):
     DETECTED = "detected"
     NOT_APPLICABLE = "not_applicable"
     NOT_DETECTED = "not_detected"

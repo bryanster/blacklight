@@ -104,14 +104,14 @@ def sync_detailed(
     body: ReprocessContentSourceRequest | Unset = UNSET,
     x_csrf_token: str | Unset = UNSET,
 ) -> Response[ContentSyncJob | Problem]:
-    r"""Reprocess a source from its last raw snapshot.
+    """Reprocess a source from its last raw snapshot.
 
      Administrators only (`content.sync`). Creates a `reprocess` job that
     opens the last successful raw snapshot for the named version and runs
     Parse → Normalize → Apply with no network Fetch. Use this after an
     adapter bugfix to repair the catalog without another download.
 
-    The optional body pin `{ \"version\": \"15.1\" }` selects which snapshot.
+    The optional body pin `{ "version": "15.1" }` selects which snapshot.
     Rolling sources (Atomic, Sigma, CTID) default to `current` when the
     pin is omitted. ATT&CK requires an explicit version. Answers `409`
     when no raw snapshot exists for that source/version, and when another
@@ -152,14 +152,14 @@ def sync(
     body: ReprocessContentSourceRequest | Unset = UNSET,
     x_csrf_token: str | Unset = UNSET,
 ) -> ContentSyncJob | Problem | None:
-    r"""Reprocess a source from its last raw snapshot.
+    """Reprocess a source from its last raw snapshot.
 
      Administrators only (`content.sync`). Creates a `reprocess` job that
     opens the last successful raw snapshot for the named version and runs
     Parse → Normalize → Apply with no network Fetch. Use this after an
     adapter bugfix to repair the catalog without another download.
 
-    The optional body pin `{ \"version\": \"15.1\" }` selects which snapshot.
+    The optional body pin `{ "version": "15.1" }` selects which snapshot.
     Rolling sources (Atomic, Sigma, CTID) default to `current` when the
     pin is omitted. ATT&CK requires an explicit version. Answers `409`
     when no raw snapshot exists for that source/version, and when another
@@ -195,14 +195,14 @@ async def asyncio_detailed(
     body: ReprocessContentSourceRequest | Unset = UNSET,
     x_csrf_token: str | Unset = UNSET,
 ) -> Response[ContentSyncJob | Problem]:
-    r"""Reprocess a source from its last raw snapshot.
+    """Reprocess a source from its last raw snapshot.
 
      Administrators only (`content.sync`). Creates a `reprocess` job that
     opens the last successful raw snapshot for the named version and runs
     Parse → Normalize → Apply with no network Fetch. Use this after an
     adapter bugfix to repair the catalog without another download.
 
-    The optional body pin `{ \"version\": \"15.1\" }` selects which snapshot.
+    The optional body pin `{ "version": "15.1" }` selects which snapshot.
     Rolling sources (Atomic, Sigma, CTID) default to `current` when the
     pin is omitted. ATT&CK requires an explicit version. Answers `409`
     when no raw snapshot exists for that source/version, and when another
@@ -241,14 +241,14 @@ async def asyncio(
     body: ReprocessContentSourceRequest | Unset = UNSET,
     x_csrf_token: str | Unset = UNSET,
 ) -> ContentSyncJob | Problem | None:
-    r"""Reprocess a source from its last raw snapshot.
+    """Reprocess a source from its last raw snapshot.
 
      Administrators only (`content.sync`). Creates a `reprocess` job that
     opens the last successful raw snapshot for the named version and runs
     Parse → Normalize → Apply with no network Fetch. Use this after an
     adapter bugfix to repair the catalog without another download.
 
-    The optional body pin `{ \"version\": \"15.1\" }` selects which snapshot.
+    The optional body pin `{ "version": "15.1" }` selects which snapshot.
     Rolling sources (Atomic, Sigma, CTID) default to `current` when the
     pin is omitted. ATT&CK requires an explicit version. Answers `409`
     when no raw snapshot exists for that source/version, and when another

@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class FindingStatus(str, Enum):
+class FindingStatus(StrEnum):
     ACCEPTED_RISK = "accepted_risk"
     IN_PROGRESS = "in_progress"
     OPEN = "open"

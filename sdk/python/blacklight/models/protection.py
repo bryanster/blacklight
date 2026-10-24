@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class Protection(str, Enum):
+class Protection(StrEnum):
     BLOCKED = "blocked"
     NA = "n/a"
     NOT_BLOCKED = "not_blocked"

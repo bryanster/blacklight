@@ -35,7 +35,7 @@ class LoginResult:
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.current_user import CurrentUser
+        from ..models.current_user import CurrentUser  # noqa: PLC0415
 
         status = self.status.value
 
@@ -57,7 +57,7 @@ class LoginResult:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.current_user import CurrentUser
+        from ..models.current_user import CurrentUser  # noqa: PLC0415
 
         d = dict(src_dict)
         status = LoginStatus(d.pop("status"))

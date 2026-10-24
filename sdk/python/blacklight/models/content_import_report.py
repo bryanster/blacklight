@@ -37,7 +37,7 @@ class ContentImportReport:
     errors: list[ContentImportIssue]
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.content_import_issue import ContentImportIssue
+        from ..models.content_import_issue import ContentImportIssue  # noqa: PLC0415
 
         dry_run = self.dry_run
 
@@ -86,7 +86,7 @@ class ContentImportReport:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.content_import_issue import ContentImportIssue
+        from ..models.content_import_issue import ContentImportIssue  # noqa: PLC0415
 
         d = dict(src_dict)
         dry_run = d.pop("dryRun")

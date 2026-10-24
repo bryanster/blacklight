@@ -9,12 +9,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.4] — 2026-10-24
 
+### Security
+
+- **Every open Dependabot security alert is closed.** Security fixes are taken
+  regardless of the cooldown below:
+  - `certifi` `2026.10.23` in `sdk/python` and `tools/pygen` (critical).
+  - `openapi-python-client` `0.29.1` (GHSA-5293-mq8x-g3xj, high). The patched
+    generator escapes docstrings differently, so `sdk/python/blacklight` is
+    regenerated; only docstring text changes.
+  - `klauspost/compress` `v1.18.7` (high, via DuckDB's Arrow dependency).
+  - `kin-openapi` `v0.151.0`, `rustls` `0.23.46`, and in the npm trees `vite`,
+    `proxy-addr`, `source-map-js`, `@modelcontextprotocol/sdk`, `hono`,
+    `ip-address` and `brace-expansion` past their advisories.
+
 ### Changed
 
 - **Dependencies are refreshed across every ecosystem in the repository.**
   Updates follow the same one-week cooldown Dependabot uses here, so nothing
-  published in the last seven days was taken, with one exception: Node moves to
-  `24.22.1` because that release is a security release.
+  published in the last seven days was taken, except security fixes: Node moves
+  to `24.22.1` because that release is a security release, and the fixes above.
   - **Go:** `duckdb-go` `v2.10506.0` (DuckDB 1.5.6), `chi` `v5.5.0`,
     `kin-openapi` `v0.151.0`, `go-jose` `v4.1.6`, `golang.org/x/crypto`
     `v0.58.0`, `x/sync` `v0.24.0`, `x/term` `v0.47.0`, and `chromedp`

@@ -22,7 +22,7 @@ class SeveritySnapshot:
     buckets: list[SeverityBucket]
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.severity_bucket import SeverityBucket
+        from ..models.severity_bucket import SeverityBucket  # noqa: PLC0415
 
         buckets = []
         for buckets_item_data in self.buckets:
@@ -41,7 +41,7 @@ class SeveritySnapshot:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.severity_bucket import SeverityBucket
+        from ..models.severity_bucket import SeverityBucket  # noqa: PLC0415
 
         d = dict(src_dict)
         buckets = []

@@ -28,8 +28,8 @@ class AnalyticsBurndown:
     blind_filtered: bool
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.burndown_point import BurndownPoint
-        from ..models.severity_snapshot import SeveritySnapshot
+        from ..models.burndown_point import BurndownPoint  # noqa: PLC0415
+        from ..models.severity_snapshot import SeveritySnapshot  # noqa: PLC0415
 
         interval = self.interval.value
 
@@ -57,8 +57,8 @@ class AnalyticsBurndown:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.burndown_point import BurndownPoint
-        from ..models.severity_snapshot import SeveritySnapshot
+        from ..models.burndown_point import BurndownPoint  # noqa: PLC0415
+        from ..models.severity_snapshot import SeveritySnapshot  # noqa: PLC0415
 
         d = dict(src_dict)
         interval = BurndownInterval(d.pop("interval"))

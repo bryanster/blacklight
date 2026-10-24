@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class EngagementMode(str, Enum):
+class EngagementMode(StrEnum):
     BLIND = "blind"
     STANDARD = "standard"
 

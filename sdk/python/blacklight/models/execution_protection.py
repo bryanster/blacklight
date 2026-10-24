@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class ExecutionProtection(str, Enum):
+class ExecutionProtection(StrEnum):
     BLOCKED = "blocked"
     NA = "n/a"
     NOT_BLOCKED = "not_blocked"

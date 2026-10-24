@@ -62,7 +62,7 @@ def sync_detailed(
     *,
     client: AuthenticatedClient | Client,
 ) -> Response[Problem | Sessions]:
-    r"""List the browsers you are currently signed in on.
+    """List the browsers you are currently signed in on.
 
      Your own live sessions, newest first, and nobody else's — there is no
     parameter that names another account. An administrator wanting somebody
@@ -77,7 +77,7 @@ def sync_detailed(
     revoking one worth doing.
 
     `current` marks the session this request arrived on. It is the one row a
-    client should not offer an ordinary \"revoke\" for: ending it is signing
+    client should not offer an ordinary "revoke" for: ending it is signing
     out, and `POST /auth/logout` is where that lives, with the cookie
     clearing that goes with it.
 
@@ -104,7 +104,7 @@ def sync(
     *,
     client: AuthenticatedClient | Client,
 ) -> Problem | Sessions | None:
-    r"""List the browsers you are currently signed in on.
+    """List the browsers you are currently signed in on.
 
      Your own live sessions, newest first, and nobody else's — there is no
     parameter that names another account. An administrator wanting somebody
@@ -119,7 +119,7 @@ def sync(
     revoking one worth doing.
 
     `current` marks the session this request arrived on. It is the one row a
-    client should not offer an ordinary \"revoke\" for: ending it is signing
+    client should not offer an ordinary "revoke" for: ending it is signing
     out, and `POST /auth/logout` is where that lives, with the cookie
     clearing that goes with it.
 
@@ -142,7 +142,7 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient | Client,
 ) -> Response[Problem | Sessions]:
-    r"""List the browsers you are currently signed in on.
+    """List the browsers you are currently signed in on.
 
      Your own live sessions, newest first, and nobody else's — there is no
     parameter that names another account. An administrator wanting somebody
@@ -157,7 +157,7 @@ async def asyncio_detailed(
     revoking one worth doing.
 
     `current` marks the session this request arrived on. It is the one row a
-    client should not offer an ordinary \"revoke\" for: ending it is signing
+    client should not offer an ordinary "revoke" for: ending it is signing
     out, and `POST /auth/logout` is where that lives, with the cookie
     clearing that goes with it.
 
@@ -182,7 +182,7 @@ async def asyncio(
     *,
     client: AuthenticatedClient | Client,
 ) -> Problem | Sessions | None:
-    r"""List the browsers you are currently signed in on.
+    """List the browsers you are currently signed in on.
 
      Your own live sessions, newest first, and nobody else's — there is no
     parameter that names another account. An administrator wanting somebody
@@ -197,7 +197,7 @@ async def asyncio(
     revoking one worth doing.
 
     `current` marks the session this request arrived on. It is the one row a
-    client should not offer an ordinary \"revoke\" for: ending it is signing
+    client should not offer an ordinary "revoke" for: ending it is signing
     out, and `POST /auth/logout` is where that lives, with the cookie
     clearing that goes with it.
 

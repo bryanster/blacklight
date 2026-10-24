@@ -42,7 +42,7 @@ class CreatedUser:
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.user import User
+        from ..models.user import User  # noqa: PLC0415
 
         user = self.user.to_dict()
 
@@ -61,7 +61,7 @@ class CreatedUser:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.user import User
+        from ..models.user import User  # noqa: PLC0415
 
         d = dict(src_dict)
         user = User.from_dict(d.pop("user"))

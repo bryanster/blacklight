@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class EvidenceSide(str, Enum):
+class EvidenceSide(StrEnum):
     BLUE = "blue"
     RED = "red"
 

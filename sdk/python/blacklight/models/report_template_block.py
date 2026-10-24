@@ -26,7 +26,7 @@ class ReportTemplateBlock:
     """ Block parameters, validated against the registry's ParamSchema. """
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.report_template_block_params import ReportTemplateBlockParams
+        from ..models.report_template_block_params import ReportTemplateBlockParams  # noqa: PLC0415
 
         ordinal = self.ordinal
 
@@ -48,7 +48,7 @@ class ReportTemplateBlock:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.report_template_block_params import ReportTemplateBlockParams
+        from ..models.report_template_block_params import ReportTemplateBlockParams  # noqa: PLC0415
 
         d = dict(src_dict)
         ordinal = d.pop("ordinal")

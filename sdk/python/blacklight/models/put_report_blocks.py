@@ -22,7 +22,7 @@ class PutReportBlocks:
     blocks: list[ReportBlockInput]
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.report_block_input import ReportBlockInput
+        from ..models.report_block_input import ReportBlockInput  # noqa: PLC0415
 
         blocks = []
         for blocks_item_data in self.blocks:
@@ -41,7 +41,7 @@ class PutReportBlocks:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.report_block_input import ReportBlockInput
+        from ..models.report_block_input import ReportBlockInput  # noqa: PLC0415
 
         d = dict(src_dict)
         blocks = []

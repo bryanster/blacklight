@@ -26,7 +26,7 @@ class AnalyticsDistribution:
     blind_filtered: bool
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.distribution_result import DistributionResult
+        from ..models.distribution_result import DistributionResult  # noqa: PLC0415
 
         category = self.category.to_dict()
 
@@ -54,7 +54,7 @@ class AnalyticsDistribution:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.distribution_result import DistributionResult
+        from ..models.distribution_result import DistributionResult  # noqa: PLC0415
 
         d = dict(src_dict)
         category = DistributionResult.from_dict(d.pop("category"))

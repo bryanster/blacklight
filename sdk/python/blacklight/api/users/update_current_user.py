@@ -84,7 +84,7 @@ def sync_detailed(
     body: UpdateSelfRequest,
     x_csrf_token: str | Unset = UNSET,
 ) -> Response[Problem | User]:
-    r"""Change your own display name.
+    """Change your own display name.
 
      The self-service half of user administration, and deliberately the
     smallest one that could exist: a display name and nothing else.
@@ -92,7 +92,7 @@ def sync_detailed(
     Your platform role and your status are **not** fields of this request.
     Not filtered out of it — absent from it, so a body that names one is
     rejected by the request validator with `400` before any handler runs
-    (PLAN.md §4: \"field safety comes from the schema\"). Raising your own
+    (PLAN.md §4: "field safety comes from the schema"). Raising your own
     privilege through this endpoint is not something the server declines to
     do; it is something there is no way to ask for.
 
@@ -130,7 +130,7 @@ def sync(
     body: UpdateSelfRequest,
     x_csrf_token: str | Unset = UNSET,
 ) -> Problem | User | None:
-    r"""Change your own display name.
+    """Change your own display name.
 
      The self-service half of user administration, and deliberately the
     smallest one that could exist: a display name and nothing else.
@@ -138,7 +138,7 @@ def sync(
     Your platform role and your status are **not** fields of this request.
     Not filtered out of it — absent from it, so a body that names one is
     rejected by the request validator with `400` before any handler runs
-    (PLAN.md §4: \"field safety comes from the schema\"). Raising your own
+    (PLAN.md §4: "field safety comes from the schema"). Raising your own
     privilege through this endpoint is not something the server declines to
     do; it is something there is no way to ask for.
 
@@ -171,7 +171,7 @@ async def asyncio_detailed(
     body: UpdateSelfRequest,
     x_csrf_token: str | Unset = UNSET,
 ) -> Response[Problem | User]:
-    r"""Change your own display name.
+    """Change your own display name.
 
      The self-service half of user administration, and deliberately the
     smallest one that could exist: a display name and nothing else.
@@ -179,7 +179,7 @@ async def asyncio_detailed(
     Your platform role and your status are **not** fields of this request.
     Not filtered out of it — absent from it, so a body that names one is
     rejected by the request validator with `400` before any handler runs
-    (PLAN.md §4: \"field safety comes from the schema\"). Raising your own
+    (PLAN.md §4: "field safety comes from the schema"). Raising your own
     privilege through this endpoint is not something the server declines to
     do; it is something there is no way to ask for.
 
@@ -215,7 +215,7 @@ async def asyncio(
     body: UpdateSelfRequest,
     x_csrf_token: str | Unset = UNSET,
 ) -> Problem | User | None:
-    r"""Change your own display name.
+    """Change your own display name.
 
      The self-service half of user administration, and deliberately the
     smallest one that could exist: a display name and nothing else.
@@ -223,7 +223,7 @@ async def asyncio(
     Your platform role and your status are **not** fields of this request.
     Not filtered out of it — absent from it, so a body that names one is
     rejected by the request validator with `400` before any handler runs
-    (PLAN.md §4: \"field safety comes from the schema\"). Raising your own
+    (PLAN.md §4: "field safety comes from the schema"). Raising your own
     privilege through this endpoint is not something the server declines to
     do; it is something there is no way to ask for.
 

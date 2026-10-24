@@ -23,7 +23,7 @@ class ContentMitigationList:
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.content_mitigation import ContentMitigation
+        from ..models.content_mitigation import ContentMitigation  # noqa: PLC0415
 
         items = []
         for items_item_data in self.items:
@@ -42,7 +42,7 @@ class ContentMitigationList:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.content_mitigation import ContentMitigation
+        from ..models.content_mitigation import ContentMitigation  # noqa: PLC0415
 
         d = dict(src_dict)
         items = []

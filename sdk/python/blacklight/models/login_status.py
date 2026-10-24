@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class LoginStatus(str, Enum):
+class LoginStatus(StrEnum):
     AUTHENTICATED = "authenticated"
     MFA_ENROLMENT_REQUIRED = "mfa_enrolment_required"
     MFA_REQUIRED = "mfa_required"

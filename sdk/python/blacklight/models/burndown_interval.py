@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class BurndownInterval(str, Enum):
+class BurndownInterval(StrEnum):
     DAILY = "daily"
     WEEKLY = "weekly"
 

@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class SSOProviderId(str, Enum):
+class SSOProviderId(StrEnum):
     OIDC = "oidc"
     SAML = "saml"
 

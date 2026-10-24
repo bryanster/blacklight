@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class ContentSoftwareType(str, Enum):
+class ContentSoftwareType(StrEnum):
     MALWARE = "malware"
     TOOL = "tool"
 

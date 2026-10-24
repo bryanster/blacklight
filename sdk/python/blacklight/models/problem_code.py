@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class ProblemCode(str, Enum):
+class ProblemCode(StrEnum):
     CONFLICT = "conflict"
     FORBIDDEN = "forbidden"
     INTERNAL = "internal"

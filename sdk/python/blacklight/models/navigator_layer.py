@@ -38,11 +38,11 @@ class NavigatorLayer:
     select_subtechniques_with_parent: bool | Unset = UNSET
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.navigator_layer_filters import NavigatorLayerFilters
-        from ..models.navigator_layer_gradient import NavigatorLayerGradient
-        from ..models.navigator_layer_versions import NavigatorLayerVersions
-        from ..models.navigator_legend_item import NavigatorLegendItem
-        from ..models.navigator_technique import NavigatorTechnique
+        from ..models.navigator_layer_filters import NavigatorLayerFilters  # noqa: PLC0415
+        from ..models.navigator_layer_gradient import NavigatorLayerGradient  # noqa: PLC0415
+        from ..models.navigator_layer_versions import NavigatorLayerVersions  # noqa: PLC0415
+        from ..models.navigator_legend_item import NavigatorLegendItem  # noqa: PLC0415
+        from ..models.navigator_technique import NavigatorTechnique  # noqa: PLC0415
 
         name = self.name
 
@@ -101,11 +101,11 @@ class NavigatorLayer:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.navigator_layer_filters import NavigatorLayerFilters
-        from ..models.navigator_layer_gradient import NavigatorLayerGradient
-        from ..models.navigator_layer_versions import NavigatorLayerVersions
-        from ..models.navigator_legend_item import NavigatorLegendItem
-        from ..models.navigator_technique import NavigatorTechnique
+        from ..models.navigator_layer_filters import NavigatorLayerFilters  # noqa: PLC0415
+        from ..models.navigator_layer_gradient import NavigatorLayerGradient  # noqa: PLC0415
+        from ..models.navigator_layer_versions import NavigatorLayerVersions  # noqa: PLC0415
+        from ..models.navigator_legend_item import NavigatorLegendItem  # noqa: PLC0415
+        from ..models.navigator_technique import NavigatorTechnique  # noqa: PLC0415
 
         d = dict(src_dict)
         name = d.pop("name")

@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class ListEngagementsStatus(str, Enum):
+class ListEngagementsStatus(StrEnum):
     ACTIVE = "active"
     ARCHIVED = "archived"
     CLOSED = "closed"

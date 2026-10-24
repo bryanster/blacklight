@@ -37,7 +37,7 @@ class CreateStepFromTemplate:
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.create_step_from_template_arg_values import CreateStepFromTemplateArgValues
+        from ..models.create_step_from_template_arg_values import CreateStepFromTemplateArgValues  # noqa: PLC0415
 
         template_id = str(self.template_id)
 
@@ -71,7 +71,7 @@ class CreateStepFromTemplate:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.create_step_from_template_arg_values import CreateStepFromTemplateArgValues
+        from ..models.create_step_from_template_arg_values import CreateStepFromTemplateArgValues  # noqa: PLC0415
 
         d = dict(src_dict)
         template_id = UUID(d.pop("templateId"))
