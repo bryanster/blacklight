@@ -5,4 +5,4 @@
 # 24 is the active LTS. web/package.json states the same requirement as an
 # `engines` range, and web/.nvmrc repeats it for nvm/fnm users — proto reads
 # either, but a developer without proto only ever looks at .nvmrc.
-node = "24.18.1"
+node = "24.22.1"

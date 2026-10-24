@@ -7,6 +7,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.4] — 2026-10-24
+
+### Changed
+
+- **Dependencies are refreshed across every ecosystem in the repository.**
+  Updates follow the same one-week cooldown Dependabot uses here, so nothing
+  published in the last seven days was taken, with one exception: Node moves to
+  `24.22.1` because that release is a security release.
+  - **Go:** `duckdb-go` `v2.10506.0` (DuckDB 1.5.6), `chi` `v5.5.0`,
+    `kin-openapi` `v0.151.0`, `go-jose` `v4.1.6`, `golang.org/x/crypto`
+    `v0.58.0`, `x/sync` `v0.24.0`, `x/term` `v0.47.0`, and `chromedp`
+    `v0.21.0` with `cdproto` `v0.157.8`. The Go SDK takes `oapi-codegen/runtime`
+    `v1.7.0` and `nullable` `v1.2.0` and keeps its Go 1.24 floor.
+  - **PDF export moves to chromedp's new generic API.** chromedp `v0.20`
+    replaced `ActionFunc` and the `page.X().Do(ctx)` builders with typed
+    commands; `internal/report/pdf` now uses `chromedp.Do`/`chromedp.Run`,
+    `cdp.Call` and the built-in `chromedp.PrintToPDF` action. Paper size (A4),
+    margins (0.4 in) and background printing are unchanged.
+  - **Web, e2e and TypeScript SDK:** React `19.3`, React Router `8.4`, Vite
+    `8.3`, Radix UI `1.8`, TanStack Query `5.104`, Tiptap `3.32`, ESLint
+    `10.13`, typescript-eslint `8.71`, Playwright `1.64`, and Vitest `5` in the
+    web client and the TypeScript SDK. `npm audit` is clean in all three trees.
+  - **Python and Rust SDKs:** lockfiles refreshed (`uv.lock` with the CI-pinned
+    uv `0.12.5`; `Cargo.lock` takes `reqwest` `0.13.5`, `tokio` `1.54.1`,
+    `rustls` `0.23.46`).
+  - **Tooling:** Node `24.22.1` everywhere it is pinned (`.prototools`,
+    `.nvmrc`, `deploy/Dockerfile`, the devcontainer), golangci-lint `v2.15.0`,
+    the Terraform example on `azurerm` `5.10.0` and `random` `3.9.1`, and the
+    GitHub Actions `setup-node`, `upload-artifact`, `build-push-action`,
+    `setup-buildx-action`, `setup-qemu-action` and `action-gh-release` on their
+    latest releases.
+- **Held back on purpose.** TypeScript `7` (typescript-eslint supports
+  `< 6.1`), MSW `3` and jsdom `30.1` (both break the multipart upload tests'
+  `File` bodies under jsdom), sonner `2.0.8` (toasts stop appearing in five
+  tests), DuckDB `2.0` (`v2.20000.0`, a new storage engine released this week),
+  and the generators `oapi-codegen` `v2.8.1` / `runtime` `v1.8.0` and
+  `docker/login-action` `v4.7.0` (inside the cooldown).
+
 ### Fixed
 
 - **Deleting a scenario now removes it and its whole graph (was a 500).**
@@ -402,6 +440,7 @@ older binary.
 - **Static asset directory.** The binary is the whole application; nothing is
   served from disk.
 
+[1.0.4]: https://github.com/bryanster/blacklight/releases/tag/v1.0.4
 [1.0.3]: https://github.com/bryanster/blacklight/releases/tag/v1.0.3
 [1.0.2]: https://github.com/bryanster/blacklight/releases/tag/v1.0.2
 [1.0.1]: https://github.com/bryanster/blacklight/releases/tag/v1.0.1
