@@ -135,10 +135,14 @@ func TestSecretBytesMeasuresTheSmallestReading(t *testing.T) {
 		want  int
 	}{
 		{value: "", want: 0},
-		{value: testSecret, want: 32}, // 44 base64 characters
-		{value: "cmVhbGx5IG5vdCB0aGlydHktdHdvIGJ5dGVzIQ==", want: 28},    // long, thin
-		{value: "correct horse battery staple, and then some", want: 43}, // decodes as nothing
-		{value: "00112233445566778899aabbccddeeff", want: 16},            // 32 hex characters
+		// 44 base64 characters
+		{value: testSecret, want: 32},
+		// long, thin
+		{value: "cmVhbGx5IG5vdCB0aGlydHktdHdvIGJ5dGVzIQ==", want: 28},
+		// decodes as nothing
+		{value: "correct horse battery staple, and then some", want: 43},
+		// 32 hex characters
+		{value: "00112233445566778899aabbccddeeff", want: 16},
 	}
 
 	for _, tt := range tests {
