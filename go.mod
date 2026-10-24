@@ -4,7 +4,7 @@ go 1.26.0
 
 require (
 	github.com/beevik/etree v1.8.1
-	github.com/chromedp/cdproto v0.157.8
+	github.com/chromedp/cdproto v0.158.2
 	github.com/chromedp/chromedp v0.21.0
 	github.com/coreos/go-oidc/v3 v3.21.0
 	github.com/crewjam/saml v0.5.1
