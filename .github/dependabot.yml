@@ -109,6 +109,37 @@ updates:
       - "dependencies"
       - "terraform"
 
+  # The base images in deploy/Dockerfile, which are pinned by digest so that
+  # this can see them (the comment above their FROM lines explains why).
+  # Weekly rather than monthly: Debian and the official images are rebuilt
+  # for security fixes far more often than once a month, and those rebuilds
+  # are most of what the image scan reports. One grouped PR, because the three
+  # stages must move together on the same Debian release. Major bumps (Node
+  # 26, a new Debian codename) are left for a human, since they change the
+  # glibc or the toolchain rather than patch it.
+  - package-ecosystem: "docker"
+    directory: "/deploy"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 3
+    groups:
+      docker-base-images:
+        patterns:
+          - "*"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+    commit-message:
+      prefix: "chore"
+    pull-request-branch-name:
+      separator: "/"
+    open-pull-requests-limit: 5
+    rebase-strategy: "auto"
+    labels:
+      - "dependencies"
+      - "docker"
+
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
