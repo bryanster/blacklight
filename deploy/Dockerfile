@@ -33,7 +33,7 @@
 # Pinned to BUILDPLATFORM: the output is JavaScript, which is the same bytes
 # whatever the target architecture, so there is no reason to run this under
 # emulation when building an arm64 image on an amd64 host (or the reverse).
-FROM --platform=$BUILDPLATFORM node:24.22.1-trixie-slim@sha256:43b9ba1142b8dcf33fa8f922ca1be85714adc444e0586c7cf7726daaeabc1bea AS web
+FROM --platform=$BUILDPLATFORM node:24.22.2-trixie-slim@sha256:54f84b4cf8432b21aaffd5d3ce8d41e12cea0d10d33c09d2f3c9879d49d6b446 AS web
 
 WORKDIR /src/web
 
@@ -59,7 +59,7 @@ RUN npm run build
 # target the other architecture too. Compiling natively for the host and
 # cross-compiling for the other architecture take about the same time; only the
 # runtime stage's `apt-get` runs emulated, and apt survives QEMU fine.
-FROM --platform=$BUILDPLATFORM golang:1.26-trixie@sha256:909771fef53e3dcb0950255f0c9a8b4728c3b841e61509c7b29b098de7ee02d4 AS build
+FROM --platform=$BUILDPLATFORM golang:1.27-trixie@sha256:c65ecfe613b539ac74c62a4c3b2c27e8f8a6076384c8f27e8a3c0f3be17cc385 AS build
 
 # Set by BuildKit, always, no default needed.
 ARG BUILDARCH
@@ -133,7 +133,7 @@ RUN --mount=type=cache,target=/go/pkg/mod,sharing=locked \
     go build -trimpath -ldflags "$ldflags" -o /out/blctl ./cmd/blctl
 
 # ─── Stage 3 · runtime ────────────────────────────────────────────────────────
-FROM debian:trixie-slim@sha256:62bd423aeee912639ca8ee681c2b762cb3e25137e0a92b20be455898a9f034ad AS runtime
+FROM debian:trixie-slim@sha256:f6b08b09a05725f9431502d3b5714f5c4576e82c1a84fa1debe0c24a7e0c3ec4 AS runtime
 
 # chromium + chromium-sandbox: M6 renders PDFs by driving headless Chromium, and
 #   discovering that at the end of M6 would be a packaging problem found too
