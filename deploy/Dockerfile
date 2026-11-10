@@ -33,7 +33,7 @@
 # Pinned to BUILDPLATFORM: the output is JavaScript, which is the same bytes
 # whatever the target architecture, so there is no reason to run this under
 # emulation when building an arm64 image on an amd64 host (or the reverse).
-FROM --platform=$BUILDPLATFORM node:24.22.1-trixie-slim@sha256:43b9ba1142b8dcf33fa8f922ca1be85714adc444e0586c7cf7726daaeabc1bea AS web
+FROM --platform=$BUILDPLATFORM node:24.22.2-trixie-slim@sha256:0820eaa85e07d0490446dd01d14707e17e6108a36988cf374899cd057eb3812d AS web
 
 WORKDIR /src/web
 
@@ -133,7 +133,7 @@ RUN --mount=type=cache,target=/go/pkg/mod,sharing=locked \
     go build -trimpath -ldflags "$ldflags" -o /out/blctl ./cmd/blctl
 
 # ─── Stage 3 · runtime ────────────────────────────────────────────────────────
-FROM debian:trixie-slim@sha256:62bd423aeee912639ca8ee681c2b762cb3e25137e0a92b20be455898a9f034ad AS runtime
+FROM debian:trixie-slim@sha256:a72b4433de1cf7d6bae0c4cee74d0547f58601a643b3375f070c51600d63b6b2 AS runtime
 
 # chromium + chromium-sandbox: M6 renders PDFs by driving headless Chromium, and
 #   discovering that at the end of M6 would be a packaging problem found too
