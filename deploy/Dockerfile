@@ -33,7 +33,7 @@
 # Pinned to BUILDPLATFORM: the output is JavaScript, which is the same bytes
 # whatever the target architecture, so there is no reason to run this under
 # emulation when building an arm64 image on an amd64 host (or the reverse).
-FROM --platform=$BUILDPLATFORM node:24.22.1-trixie-slim@sha256:43b9ba1142b8dcf33fa8f922ca1be85714adc444e0586c7cf7726daaeabc1bea AS web
+FROM --platform=$BUILDPLATFORM node:24.22.2-trixie-slim@sha256:0820eaa85e07d0490446dd01d14707e17e6108a36988cf374899cd057eb3812d AS web
 
 WORKDIR /src/web
 
